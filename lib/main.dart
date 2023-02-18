@@ -3,6 +3,9 @@ import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:tariki/views/home.dart';
+import 'package:tariki/views/settings.dart';
+import 'package:tariki/views/signaler.dart';
 
 void main(List<String> args) {
   runApp(ResponsiveSizer(
@@ -25,10 +28,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = <Widget>[
-    const Text('Accueil'),
-    const Text('Signaler'),
-    const Text('Parametres'),
+  final List<Widget> _pages = <Widget>[
+    const HomePage(),
+    const SignalerPage(),
+    const SettingsPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -42,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(
           child: Container(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _pages.elementAt(_selectedIndex),
       )),
       bottomNavigationBar: SizedBox(
         height: 11.h,
