@@ -1,6 +1,6 @@
 # tariki
 
-A new Flutter project.
+A new Flutter App for Road degradation and reporting of blackspots.
 
 ## Getting Started
 
