@@ -1,0 +1,83 @@
+import 'dart:js';
+
+import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+
+void main(List<String> args) {
+  runApp(ResponsiveSizer(
+    builder: (context, orientation, screenT) {
+      return const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(),
+      );
+    },
+  ));
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _widgetOptions = <Widget>[
+    const Text('Accueil'),
+    const Text('Signaler'),
+    const Text('Parametres'),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Container(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      )),
+      bottomNavigationBar: SizedBox(
+        height: 11.h,
+        child: BottomNavigationBar(
+          selectedItemColor: const Color.fromRGBO(94, 129, 244, 1.0),
+          unselectedItemColor: const Color.fromRGBO(77, 77, 89, 1.0),
+          unselectedLabelStyle: const TextStyle(
+              color: Color.fromRGBO(77, 77, 89, 1.0),
+              fontFamily: "Roboto",
+              fontWeight: FontWeight.normal),
+          selectedLabelStyle: const TextStyle(
+              color: Color.fromRGBO(94, 129, 244, 1.0),
+              fontFamily: "Roboto",
+              fontWeight: FontWeight.w500),
+          iconSize: 25.sp,
+          selectedFontSize: 16.sp,
+          unselectedFontSize: 16.sp,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(LineIcons.home), // change it
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add_circle_outline), // change it
+              label: 'Signaler',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(LineIcons.cog), // change it
+              label: 'Parametres',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+      ),
+    );
+  }
+}
