@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 24),
               )),
               decoration: const BoxDecoration(
-                color: Color(0xFF7A4747),
+                color: Color.fromARGB(255, 194, 217, 218),
               ),
             ),
           ),
@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                 obscureText: false,
                 decoration: InputDecoration(
                   hintText: 'Search..',
-                  hintStyle: TextStyle(fontFamily: "Roboto"),
+                  hintStyle: TextStyle(fontFamily: "Roboto" ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color(0x00FFFFFF),
@@ -93,7 +93,8 @@ class HomePage extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.white,
                   prefixIcon: const Icon(
-                    Icons.search,
+                    FontAwesomeIcons.magnifyingGlass,
+                    size: 15,
                   ),
                   suffixIcon: _controller.text.isNotEmpty
                       ? InkWell(
@@ -125,7 +126,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {},
               text: 'Liste',
               icon: Icon(
-                Icons.menu_rounded,
+                FontAwesomeIcons.bars,
                 color: Colors.black,
                 size: 18.sp,
               ),
@@ -158,7 +159,7 @@ class HomePage extends StatelessWidget {
               buttonSize: 44,
               fillColor: Color(0xFF5E81F4),
               icon: Icon(
-                Icons.menu,
+                FontAwesomeIcons.sliders,
                 color: Colors.white,
                 size: 20,
               ),

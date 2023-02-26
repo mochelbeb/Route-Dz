@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline), // change it
+              icon: Icon(LineIcons.plusCircle), // change it
               label: 'Signaler',
             ),
             BottomNavigationBarItem(
