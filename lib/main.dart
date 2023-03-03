@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _pages = <Widget>[
     HomePage(),
-    const SignalerPage(),
+    SignalerForm(),
     const SettingsPage(),
   ];
 

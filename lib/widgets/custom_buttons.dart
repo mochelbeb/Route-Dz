@@ -340,3 +340,54 @@ extension _WithoutColorExtension on TextStyle {
         overflow: overflow,
       );
 }
+
+
+
+class DropDownButton extends StatefulWidget {
+  DropDownButton({super.key , required this.dropdownValues});
+  List<String> dropdownValues;
+
+
+  @override
+  State<DropDownButton> createState() => _DropDownButtonState();
+}
+
+class _DropDownButtonState extends State<DropDownButton> {
+  String _selectedValue = "";
+  @override
+  void initState() {
+    _selectedValue = widget.dropdownValues[0];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 42,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          icon: FaIcon(
+            FontAwesomeIcons.chevronDown,
+          ),
+          value: _selectedValue,
+          items: widget.dropdownValues.map((value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() {
+              _selectedValue = newValue!;
+            });
+  }
+        )));
+  }
+}

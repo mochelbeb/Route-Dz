@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Styles.bgColor,
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           Padding(

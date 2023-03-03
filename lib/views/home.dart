@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                 controller: _controller,
                 onChanged: (_) => EasyDebounce.debounce('_controller',
                     const Duration(milliseconds: 2000), () => {}),
-                autofocus: true,
+                autofocus: false,
                 textCapitalization: TextCapitalization.none,
                 obscureText: false,
                 decoration: InputDecoration(
