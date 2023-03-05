@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:tariki/views/home.dart';
@@ -8,7 +9,7 @@ import 'package:tariki/views/signaler.dart';
 void main(List<String> args) {
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
-      return const MaterialApp(
+      return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
       );

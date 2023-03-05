@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: Stack(
         children: [
-          //* Map Area
+          // ! Map Area
           Align(
             alignment: const AlignmentDirectional(0, 0),
             child: Container(
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          //* Map Button
+          // ! Map Button
           Align(
             alignment: const AlignmentDirectional(0.85, 0.9),
             child: MyCustomButton_widget1(
@@ -47,11 +47,11 @@ class HomePage extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-          //* Search Bar
+          // ! Search Bar
           Align(
-            alignment: const AlignmentDirectional(-0.6, -0.91),
+            alignment: const AlignmentDirectional(-0.5, -0.91),
             child: Container(
-              width: w * 0.693,
+              width: w * 0.66,
               child: TextFormField(
                 controller: _controller,
                 onChanged: (_) => EasyDebounce.debounce('_controller',
@@ -119,7 +119,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          //* Liste Button
+          // ! Liste Button
           Align(
             alignment: AlignmentDirectional(-0.8, 0.9),
             child: MyCustomButton_widget2(
@@ -149,16 +149,16 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          //* Menu Button
+          // ! Menu Button
           Align(
             alignment: AlignmentDirectional(0.87, -0.91),
             child: MyCustomButton_widget1(
               borderColor: Colors.transparent,
               borderRadius: 15,
               borderWidth: 1,
-              buttonSize: 44,
+              buttonSize: 48,
               fillColor: Color(0xFF5E81F4),
-              icon: Icon(
+              icon: FaIcon(
                 FontAwesomeIcons.sliders,
                 color: Colors.white,
                 size: 20,
@@ -166,7 +166,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-          //* Location Button
+          // ! Location Button
           Align(
             alignment: AlignmentDirectional(0.5, 0.9),
             child: MyCustomButton_widget1(

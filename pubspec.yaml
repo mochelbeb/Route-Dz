@@ -42,6 +42,7 @@ dependencies:
   easy_debounce: ^2.0.3
   auto_size_text: ^3.0.0
   gap: ^2.0.0
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,13 @@ flutter:
       fonts:
         - asset: Fonts/Roboto/Roboto-Regular.ttf
         - asset: Fonts/Roboto/Roboto-Bold.ttf
+    - family: Poppins
+      fonts:
+        - asset: Fonts/Poppins/Poppins-Regular.ttf
+        - asset: Fonts/Poppins/Poppins-Bold.ttf
+    - family: Raleway
+      fonts:
+        - asset: Fonts/Raleway/Raleway-VariableFont_wght.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
