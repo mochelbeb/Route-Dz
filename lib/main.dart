@@ -7,9 +7,11 @@ import 'package:tariki/views/settings.dart';
 import 'package:tariki/views/signaler.dart';
 
 void main(List<String> args) {
+  
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
       return GetMaterialApp(
+        
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
       );
@@ -60,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: _pages.elementAt(_selectedIndex),
       )),
       bottomNavigationBar: SizedBox(
-        height: 11.h,
+        height: 10.h,
         child: BottomNavigationBar(
           selectedItemColor: const Color.fromRGBO(94, 129, 244, 1.0),
           unselectedItemColor: const Color.fromRGBO(77, 77, 89, 1.0),
@@ -72,9 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Color.fromRGBO(94, 129, 244, 1.0),
               fontFamily: "Roboto",
               fontWeight: FontWeight.w500),
-          iconSize: 25.sp,
-          selectedFontSize: 16.sp,
-          unselectedFontSize: 16.sp,
+          iconSize: 23.sp,
+          selectedFontSize: 14.sp,
+          unselectedFontSize: 14.sp,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(LineIcons.home), // change it

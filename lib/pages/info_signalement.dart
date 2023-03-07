@@ -1,21 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:tariki/utils/app_styles.dart';
-
 import '../widgets/custom_buttons.dart';
 
-class Info_supp extends StatelessWidget {
-  Info_supp({super.key});
+
+
+class Info_supp extends StatefulWidget {
+  const Info_supp({super.key});
+
+  @override
+  State<Info_supp> createState() => _Info_suppState();
+}
+
+class _Info_suppState extends State<Info_supp> {
+  final _controllerDescription = TextEditingController();
   List<String> type_list  = ["type1","type2","type3","type4","type5"];
+  late bool _isButtonDisable;
+
+
+  @override
+  void dispose() {
+    _controllerDescription.dispose();
+    super.dispose();
+  }
+  @override
+  void initState() {
+    _isButtonDisable = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0, -1.0),
+                blurRadius: 6.0,
+              )
+            ]
+          ),
+          height: 60,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    fixedSize: Size(width/2 - 30, 40.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22.5),
+                      side: BorderSide(
+                        width: 3.0,
+                        color: Colors.cyan,
+                      )
+                    )
+                  ),
+                  onPressed: (){Get.back();},
+                  child: Text("Cancel")),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
+                    disabledForegroundColor: Color.fromARGB(255, 129, 129, 129),
+                    foregroundColor: Colors.white,
+                    textStyle: TextStyle(color: Colors.white),
+                    backgroundColor: Color.fromRGBO(33, 150, 243, 1.0),
+                    fixedSize: Size(width/2 - 30, 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22.5),
+                      side: BorderSide(
+                        color: Colors.cyan,
+                      )
+                    )
+                  ),
+                  onPressed: _isButtonDisable ? null : (){setState(() {
+                    var test_var = true;
+                    print(test_var);
+                  });},
+                  child: Text("Submit")),
+              ],
+            ),
+          ),
+        ),
       appBar: AppBar(
-        title: Text("Info Supplimentaires" , style: TextStyle(fontFamily: "Raleway",fontSize: 16,fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.white,
+        elevation: 15,
+        leading: IconButton(icon: FaIcon(FontAwesomeIcons.xmark,color: Colors.black,),onPressed: (){Get.back();},),
+        title: Text("Ajouter Point Noir" , style: TextStyle(fontFamily: "Raleway",fontSize: 16,color: Colors.black,fontWeight: FontWeight.bold),),
         centerTitle: true,
         actions: [
           IconButton(onPressed: (){
@@ -30,14 +109,12 @@ class Info_supp extends StatelessWidget {
               ),
               cancel: TextButton(onPressed: (){Get.back();}, child: Text("Retoure"))
             );
-          }, icon: FaIcon(FontAwesomeIcons.circleInfo))
+          }, icon: FaIcon(FontAwesomeIcons.circleInfo,color: Colors.black,))
         ],
       ),
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-          child: Container(
-            width: w,
-            height: h,
+      body: Container(
+            width: width,
+            height: height,
             margin: EdgeInsets.only(top: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -46,9 +123,9 @@ class Info_supp extends StatelessWidget {
               //* title
               Padding(
                 padding: const EdgeInsets.only(left: 15),
-                child: Text("Signalement d'un point noir:",style:Styles.headlineStyle1),
+                child: Text("Signalement d'un point noir:",style:TextStyle(fontFamily: "Poppins",fontSize: 18.sp,)),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 2.35.h,),
               //* Image 
               GestureDetector(
                 onTap: (){
@@ -59,8 +136,8 @@ class Info_supp extends StatelessWidget {
                     child: Text("Confirmer")));
                 },
                 child: Container(
-                  height: 0.332 * h,
-                  width: w,
+                  height: 0.332 * height,
+                  width: width,
                   margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -78,26 +155,35 @@ class Info_supp extends StatelessWidget {
                   
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 2.35.h,),
               //* Type Text
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Text("Choisir un type :", style: Styles.textStyle),
               ),
               //* Type Dropdown
-              SizedBox(height: 20,),
+              SizedBox(height: 2.35.h,),
               Padding(
                 padding: const EdgeInsets.only(left: 15,right: 15),
                 child: DropDownButton(dropdownValues: type_list),
               ),
-              //* Adresse text
-              SizedBox(height: 20,),
+              //* Description text
+              SizedBox(height: 2.35.h,),
               Padding(padding: EdgeInsets.only(left: 15),child: Text("Ajouter une description : ",style: Styles.textStyle,),),
-              //* Adresse Text Area
-              SizedBox(height: 20,),
+              //* Description Text Area
+              SizedBox(height: 2.35.h,),
               Padding(
                 padding: const EdgeInsets.only(left: 15,right: 15),
                 child: TextField(
+                  controller: _controllerDescription,
+                  onChanged: (value){
+                    setState(() {
+                      if (value.isEmpty){
+                        _isButtonDisable = true;
+                      }
+                      else _isButtonDisable = false;
+                    });
+                  },
                   maxLines: 3,
                   decoration: InputDecoration(
                     hintText: "Ajouter une breve description du point noir et l'adresse .. etc ",
@@ -107,18 +193,8 @@ class Info_supp extends StatelessWidget {
               
                 ),
               ),
-              //* Envoyer Button
-              SizedBox(height: 20,),
-              Center(
-                child: MyCustomButton_widget2(
-                  text: "Envoyer",
-                  options: Button_Option(width: 0.36*w,height: 45, textStyle: Styles.textStyle_revese,color: Color.fromRGBO(94, 129, 244, 1.0)),
-                  onPressed: (){},
-                  ),
-              )            
             ],
         ),
-          ),
       ),
     );
   }

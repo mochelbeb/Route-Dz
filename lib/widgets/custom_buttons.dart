@@ -367,7 +367,7 @@ class _DropDownButtonState extends State<DropDownButton> {
       height: 42,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Colors.black),
+        border: Border.all(color: Colors.black38),
         borderRadius: BorderRadius.circular(15),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),

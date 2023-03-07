@@ -21,7 +21,7 @@ class SignalerForm extends StatelessWidget {
           //* title + button
           Container(
             height: 47,
-            margin: EdgeInsets.fromLTRB(10,10,10,0),
+            margin: EdgeInsets.fromLTRB(10,20,10,0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -37,7 +37,7 @@ class SignalerForm extends StatelessWidget {
           ),
           //* Map + buttons
           Container(
-            height: height - 57 - 11.h,
+            height: height - 67 - 10.h,
             width: width,
             child: Stack(
               children: [
@@ -45,7 +45,7 @@ class SignalerForm extends StatelessWidget {
                 Align(
                   alignment: const AlignmentDirectional(0, 0),
                   child: Container(
-                    height: height - 57 - 11.h,
+                    height: height - 57 - 10.h,
                     width: width,
                     child: Center(
                         child: Text(
@@ -173,3 +173,4 @@ class SignalerForm extends StatelessWidget {
       );
   }
 }
+
