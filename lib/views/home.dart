@@ -1,7 +1,9 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:tariki/pages/liste_signalement.dart';
 import '../widgets/custom_buttons.dart';
 
 class HomePage extends StatelessWidget {
@@ -123,7 +125,10 @@ class HomePage extends StatelessWidget {
           Align(
             alignment: AlignmentDirectional(-0.8, 0.9),
             child: MyCustomButton_widget2(
-              onPressed: () {},
+              onPressed: () {
+                // $$ changement ici 
+                Get.to(ListeSignalement());
+              },
               text: 'Liste',
               icon: Icon(
                 FontAwesomeIcons.bars,
