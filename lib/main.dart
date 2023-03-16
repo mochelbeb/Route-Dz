@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:tariki/views/home.dart';
 import 'package:tariki/views/settings.dart';
 import 'package:tariki/views/signaler.dart';
+import 'package:tariki/widgets/map.dart';
 
 void main(List<String> args) {
-  
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
-      return GetMaterialApp(
-        
+      return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
       );
@@ -44,14 +44,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _pages = <Widget>[
     HomePage(),
-    SignalerForm(),
+    Container(), // Null 
     const SettingsPage(),
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 1){
+      Get.to(SignalerForm());
+    }else{
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -77,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           iconSize: 23.sp,
           selectedFontSize: 14.sp,
           unselectedFontSize: 14.sp,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(LineIcons.home), // change it
               label: 'Accueil',

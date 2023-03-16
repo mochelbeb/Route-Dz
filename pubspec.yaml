@@ -43,6 +43,8 @@ dependencies:
   auto_size_text: ^3.0.0
   gap: ^2.0.0
   get: ^4.6.5
+  geocode: ^1.0.2
+  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:tariki/pages/liste_signalement.dart';
 import '../widgets/custom_buttons.dart';
@@ -22,14 +23,17 @@ class HomePage extends StatelessWidget {
             child: Container(
               width: w,
               height: h * 1,
-              child: Center(
-                  child: Text(
-                "Map",
-                style: TextStyle(fontSize: 24),
-              )),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 194, 217, 218),
+              child: MapboxMap(
+                accessToken: "sk.eyJ1IjoibW9oYW1lZC1pc2xhbSIsImEiOiJjbGY5a2E0bmkyMjU4M3pudHhnOXlnYmFhIn0.19k4OxrqxtMQuQhXnyDO_Q",
+                onMapCreated: (c){},
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(36.38214832844181, 3.8946823228767466),
+                  zoom: 14.0, 
+                ),
               ),
+              // decoration: const BoxDecoration(
+              //   color: Color.fromARGB(255, 194, 217, 218),
+              // ),
             ),
           ),
           // ! Map Button

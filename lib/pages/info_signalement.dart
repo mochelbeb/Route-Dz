@@ -81,10 +81,7 @@ class _Info_suppState extends State<Info_supp> {
                       )
                     )
                   ),
-                  onPressed: _isButtonDisable ? null : (){setState(() {
-                    var test_var = true;
-                    print(test_var);
-                  });},
+                  onPressed: _isButtonDisable ? null : (){},
                   child: Text("Submit")),
               ],
             ),
@@ -92,9 +89,9 @@ class _Info_suppState extends State<Info_supp> {
         ),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 15,
+        elevation: 5,
         leading: IconButton(icon: FaIcon(FontAwesomeIcons.xmark,color: Colors.black,),onPressed: (){Get.back();},),
-        title: Text("Ajouter Point Noir" , style: TextStyle(fontFamily: "Raleway",fontSize: 16,color: Colors.black,fontWeight: FontWeight.bold),),
+        title: Text("Ajouter Point Noir" , style: TextStyle(fontFamily: "Raleway",fontSize: 16,color: Colors.black,fontWeight: FontWeight.w600),),
         centerTitle: true,
         actions: [
           IconButton(onPressed: (){

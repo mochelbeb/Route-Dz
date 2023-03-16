@@ -1,4 +1,4 @@
-package com.example.tariki
+package com.example.routedz
 
 import io.flutter.embedding.android.FlutterActivity
 
