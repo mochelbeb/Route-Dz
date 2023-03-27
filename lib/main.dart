@@ -7,13 +7,14 @@ import 'package:tariki/views/home.dart';
 import 'package:tariki/views/settings.dart';
 import 'package:tariki/views/signaler.dart';
 import 'package:tariki/widgets/map.dart';
+import 'package:tariki/pages/login.dart';
 
 void main(List<String> args) {
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
+        home: LoginPage(),
       );
     },
   ));
