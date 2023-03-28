@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:tariki/components/my_button.dart';
 import 'package:tariki/components/my_textfield.dart';
 import 'package:tariki/pages/signup.dart';
 
@@ -10,11 +9,10 @@ class LoginPage extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // sign user in method
-  void signUserIn() {}
-
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -23,36 +21,35 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.all(10),
             child: Column(
             children: [
-
-
-              Text(
+              const Text(
                 'Bonjour !\nVeuillez-vous                \nConnecter ',
-                style: TextStyle(
+                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1,
                   height: 1.25,
                 ),
-                
               ),
+
               const Gap(20),
-              // username textfield
 
               MyTextField(
                 controller: usernameController,
                 hintText: 'Email',
                 obscureText: false,
               ),
+
               const Gap(10),
-              // password textfield
+
               MyTextField(
                 controller: passwordController,
                 hintText: 'Mot de passe',
                 obscureText: true,
               ),
+
               const Gap(10),   
-              // forgot password?
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -65,46 +62,24 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const Gap(15),
-              // sign in button
-              MyButton(onTap: signUserIn,),
-              const Gap(15),
-              /* or continue with
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        'Ou continuer avec',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Gap(10),
-              // google + apple sign in buttons
-             // _colorTile('lib/images/google.png',"Continuer avec Google"),
-              //const Gap(10),
-            //  _colorTile('lib/images/facebook-logo-png-23.png',"Continuer avec Facebook"),
-*/
 
               const Gap(15),
-              // not a member? register now
+
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    backgroundColor: Color(0xFF5E81F4),
+                    fixedSize: Size(width - 70, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    )
+                  ),
+                  onPressed: (){},
+                  child: Text("Se connecter" , 
+                  style: TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,), ),
+                  ),
+
+              const Gap(15),
+
               Column(
                 children: [
                   Row(
@@ -112,7 +87,7 @@ class LoginPage extends StatelessWidget {
                     children: [
                       Text(
                          "Vous n'avez pas de compte ?",
-                         style: TextStyle(
+                          style: TextStyle(
                           color: Colors.grey[700]
                           ),
                           ),
@@ -131,12 +106,13 @@ class LoginPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,
                           ),
-                          
                         ),
                       )
                     ],
                   ),
+
               const Gap(10),
+
               const Text(
                 'Continuer sans compte',
                 style: TextStyle(
@@ -153,25 +129,4 @@ class LoginPage extends StatelessWidget {
     ),
   );
 }
-/*Widget _colorTile(String imagePath, String text) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 0),
-    margin:EdgeInsets.symmetric(horizontal: 20),
-    decoration: BoxDecoration(
-      border: Border.all(color: Colors.white),
-      borderRadius: BorderRadius.circular(50),
-      color: Colors.grey[200],
-    ),
-    child: ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 3),
-      leading: Image.asset(
-        imagePath,
-        height: 40,
-      ),
-      title: Text(
-        text,
-        ),
-    ),
-  );
- }*/
 }
