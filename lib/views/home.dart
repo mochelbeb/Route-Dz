@@ -1,11 +1,5 @@
-import 'package:easy_debounce/easy_debounce.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:tariki/pages/liste_signalement.dart';
-import '../widgets/custom_buttons.dart';
+import '../utils/packs.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});

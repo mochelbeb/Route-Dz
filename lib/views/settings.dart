@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:tariki/utils/app_styles.dart';
-import 'package:gap/gap.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../utils/packs.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);

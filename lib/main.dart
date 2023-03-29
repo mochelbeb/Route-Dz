@@ -1,20 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:line_icons/line_icons.dart';
+import 'utils/packs.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:tariki/views/home.dart';
-import 'package:tariki/views/settings.dart';
-import 'package:tariki/views/signaler.dart';
-import 'package:tariki/widgets/map.dart';
-import 'package:tariki/pages/login.dart';
 
-void main(List<String> args) {
+
+Future<void> main(List<String> args) async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool alreadySeen = prefs.getBool('alreadySeen') ?? false;
+
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: SplashScreen(alreadySeen : alreadySeen),
       );
     },
   ));

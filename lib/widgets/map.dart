@@ -1,6 +1,4 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import '../utils/packs.dart';
 
 class MyMap extends StatelessWidget {
   const MyMap({super.key});

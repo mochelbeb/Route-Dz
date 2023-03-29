@@ -1,11 +1,4 @@
-import 'package:easy_debounce/easy_debounce.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:tariki/pages/info_signalement.dart';
-
-import '../widgets/custom_buttons.dart';
+import '../utils/packs.dart';
 
 
 class SignalerForm extends StatefulWidget {

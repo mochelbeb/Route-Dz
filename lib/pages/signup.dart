@@ -1,19 +1,36 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:tariki/components/my_textfield.dart';
+import '../utils/packs.dart';
 
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
-class SignupPage extends StatelessWidget {
-  SignupPage({super.key});
-  // text editing controllers
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-
+  late bool _isChecked;
+  
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = false;
+  }
+  
+  
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return  Scaffold(
       backgroundColor: Colors.white,
       body: Center(
           child: SingleChildScrollView(
@@ -71,9 +88,13 @@ class SignupPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   children: [
-                    Checkbox(value: false, onChanged: (checked){
-                      print(checked);
-                    },
+                    Checkbox(
+                      value: _isChecked, 
+                      onChanged: (checked){
+                        setState(() {
+                          _isChecked = checked as bool;
+                        });
+                      },
                     ),
                     Text("Vous acceptez les conditions d'utilisation et la \npolitique de confidentialité."),
                   ],
@@ -90,7 +111,9 @@ class SignupPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     )
                   ),
-                  onPressed: (){},
+                  onPressed: (){
+                    Get.to(MyHomePage());
+                  },
                   child: Text("S'inscrire" , style:TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,),
               ),
             ),
@@ -99,5 +122,5 @@ class SignupPage extends StatelessWidget {
       ),
     ),
   );
-}
+  }
 }

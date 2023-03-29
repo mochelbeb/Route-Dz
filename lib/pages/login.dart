@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:tariki/components/my_textfield.dart';
-import 'package:tariki/pages/signup.dart';
+import '../utils/packs.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -73,7 +70,9 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     )
                   ),
-                  onPressed: (){},
+                  onPressed: (){
+                    Get.to(MyHomePage());
+                  },
                   child: Text("Se connecter" , 
                   style: TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,), ),
                   ),
@@ -94,10 +93,7 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(width: 4),
                       InkWell(
                          onTap: () {
-                           Navigator.push(
-                                    context,
-                          MaterialPageRoute(builder: (context) =>  SignupPage()),
-                         );
+                          Get.to(SignupPage());
                        },
                           child: const Text(
                         'Inscrivez vous',
@@ -113,14 +109,19 @@ class LoginPage extends StatelessWidget {
 
               const Gap(10),
 
-              const Text(
-                'Continuer sans compte',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 47, 96, 139),
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
+              InkWell(
+                onTap: (){
+                  Get.to(MyHomePage());
+                },
+                child: const Text(
+                  'Continuer sans compte',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 47, 96, 139),
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                    ),
                   ),
-                ),
+              ),
               ],
             ),
           ],
