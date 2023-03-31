@@ -1,3 +1,5 @@
+import 'package:responsive_sizer/responsive_sizer.dart';
+
 import '../utils/packs.dart';
 
 class SignupPage extends StatefulWidget {
@@ -37,16 +39,20 @@ class _SignupPageState extends State<SignupPage> {
             reverse: true,
             //padding: EdgeInsets.all(10),
             child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Gap(40),
-              const Text(
-                'Bienvenu !\nVeuillez créer                \nUn compte  ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1,
-                  height: 1.25,
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: Text(
+                  'Bienvenu !\nVeuillez créer \nUn compte  ',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 23.sp,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1,
+                    height: 1.25,
+                  ),
                 ),
               ),
 
@@ -96,27 +102,30 @@ class _SignupPageState extends State<SignupPage> {
                         });
                       },
                     ),
-                    Text("Vous acceptez les conditions d'utilisation \net la politique de confidentialité."),
+                    const Text("Vous acceptez les conditions d'utilisation \net la politique de confidentialité."),
                   ],
                 ),
               ),
 
               const Gap(15),
 
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    backgroundColor: Color(0xFF5E81F4),
-                    fixedSize: Size(width - 70, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    )
-                  ),
-                  onPressed: (){
-                    Get.to(MyHomePage());
-                  },
-                  child: Text("S'inscrire" , style:TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,),
+              Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      backgroundColor: Color(0xFF5E81F4),
+                      fixedSize: Size(width - 70, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      )
+                    ),
+                    onPressed: (){
+                      Get.to(MyHomePage());
+                    },
+                    child: Text("S'inscrire" , style:TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,),
+                ),
+                          ),
               ),
-            ),
           ],
         ),
       ),

@@ -13,7 +13,6 @@ export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export '../widgets/custom_buttons.dart';
 export 'package:gap/gap.dart';
 export 'package:RouteDz/pages/signup.dart';
-export 'package:RouteDz/pages/login.dart';
 export 'package:RouteDz/components/my_textfield.dart';
 export 'package:RouteDz/views/home.dart';
 export 'package:easy_splash_screen/easy_splash_screen.dart';
