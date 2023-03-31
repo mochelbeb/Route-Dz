@@ -1,5 +1,6 @@
 import '../utils/packs.dart';
 
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // text editing controllers
@@ -15,7 +16,7 @@ class LoginPage extends StatelessWidget {
       body: Center(
           child: SingleChildScrollView(
             reverse: true,
-            padding: EdgeInsets.all(10),
+            //padding: EdgeInsets.all(10),
             child: Column(
             children: [
               const Text(
@@ -100,7 +101,7 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(
                           color: Color(0xFF5E81F4),
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                          //decoration: TextDecoration.underline,
                           ),
                         ),
                       )
@@ -118,7 +119,7 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(
                     color: Color.fromARGB(255, 47, 96, 139),
                     fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
+                    //decoration: TextDecoration.underline,
                     ),
                   ),
               ),

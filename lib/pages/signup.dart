@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       body: Center(
           child: SingleChildScrollView(
             reverse: true,
-            padding: EdgeInsets.all(10),
+            //padding: EdgeInsets.all(10),
             child: Column(
             children: [
               const Gap(40),
@@ -96,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
                         });
                       },
                     ),
-                    Text("Vous acceptez les conditions d'utilisation et la \npolitique de confidentialité."),
+                    Text("Vous acceptez les conditions d'utilisation \net la politique de confidentialité."),
                   ],
                 ),
               ),

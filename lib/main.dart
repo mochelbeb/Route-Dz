@@ -1,3 +1,5 @@
+import 'package:RouteDz/views/profile.dart';
+
 import 'utils/packs.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -12,7 +14,8 @@ Future<void> main(List<String> args) async {
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(alreadySeen : alreadySeen),
+        //home: SplashScreen(alreadySeen : alreadySeen),
+        home: MyProfilePage(),
       );
     },
   ));

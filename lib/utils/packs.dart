@@ -4,7 +4,7 @@ export 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 export 'package:RouteDz/Intro%20Pages/page1.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:RouteDz/Intro%20Pages/page2.dart';
-export 'package:RouteDz/Intro%20Pages/page3.dart';
+export '../Intro%20Pages/page3.dart';
 export '../main.dart';
 export '../pages/login.dart';
 export '../widgets/shapes.dart';
