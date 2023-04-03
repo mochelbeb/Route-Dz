@@ -1,3 +1,5 @@
+import 'package:responsive_sizer/responsive_sizer.dart';
+
 import '../utils/packs.dart';
 
 class MyProfilePage extends StatefulWidget {
@@ -8,9 +10,17 @@ class MyProfilePage extends StatefulWidget {
 
 class MyProfilePageState extends State<MyProfilePage> {
     late bool _isChecked;
+    late TextEditingController _nameController;
+    late TextEditingController _surnameController;
+    
      @override
      void initState() {
       super.initState();
+      _nameController = TextEditingController();
+      _surnameController = TextEditingController();
+      _nameController.text = "Akbi";
+      _surnameController.text = "Nour el Houda";
+
       _isChecked = false;
       }
       @override
@@ -21,9 +31,9 @@ class MyProfilePageState extends State<MyProfilePage> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
-            //elevation: 5,
+            elevation: 0.0,
             leading: IconButton(icon: FaIcon(FontAwesomeIcons.chevronLeft,color: Colors.black,),onPressed: (){Get.back();},),
-            title: Text("Mon profile" , style: TextStyle(fontFamily: "Raleway",fontSize: 16,color: Colors.black,fontWeight: FontWeight.w600),),
+            title: Text("Mon profile" , style: TextStyle(fontFamily: "Raleway",fontSize: 20.sp,color: Colors.black,fontWeight: FontWeight.w600),),
             centerTitle: true,
             actions: [
               TextButton(
@@ -71,9 +81,35 @@ class MyProfilePageState extends State<MyProfilePage> {
 
                             Row(
                               children:  [
-                                const Text("Nom",style: TextStyle(color: Colors.black,fontSize: 18.0,),),
-                                const SizedBox(width: 80,),
-                                const Text("Akbi",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                 Text("Nom",style: TextStyle(color: Colors.black,fontSize: 18.0,),),
+                                 SizedBox(width: 90,),
+                                 //Text("Akbi",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                 SizedBox(
+                                  height: 40,
+                                  width: MediaQuery.of(context).size.width /2,
+                                   child: TextField(
+                                    controller: _nameController,
+                                 
+                                   ),
+                                 )
+                              ],
+                            ),
+
+                            const Gap(10),
+
+                            Row(
+                              children: [
+                                 Text("Prénom",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                 SizedBox(width: 65,),
+                                 //Text("Nour el houda",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                SizedBox(
+                                  height: 40,
+                                  width: MediaQuery.of(context).size.width /2,
+                                   child: TextField(
+                                    controller: _surnameController,
+                                 
+                                   ),
+                                 )
                               ],
                             ),
 
@@ -81,9 +117,9 @@ class MyProfilePageState extends State<MyProfilePage> {
 
                             Row(
                               children: [
-                                const Text("Prénom",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
-                                const SizedBox(width: 55,),
-                                const Text("Nour el houda",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                 Text("Email",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
+                                 SizedBox(width: 82,),                                            
+                                 Text("Nourakbi@gmail.com",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
                               ],
                             ),
 
@@ -91,19 +127,11 @@ class MyProfilePageState extends State<MyProfilePage> {
 
                             Row(
                               children: [
-                                const Text("Email",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
-                                const SizedBox(width: 72,),                                            
-                                const Text("Nourakbi@gmail.com",style: TextStyle(color: Colors.black,fontSize: 18.0,),), 
-                              ],
-                            ),
-
-                            const Gap(20),
-
-                            Row(
-                              children: [
-                                const Text("Mot de passe",style: TextStyle(color: Colors.black,fontSize: 18.0,),),
-                                const SizedBox(width: 10,),
-                                const Text("*********20",style: TextStyle(color: Colors.black,fontSize: 18.0,),),  
+                                 Text("Mot de passe",style: TextStyle(color: Colors.black,fontSize: 18.0,),),
+                                 SizedBox(width: 20,),
+                                 Text("*********20",style: TextStyle(color: Colors.black,fontSize: 18.0,),),  
+                                 SizedBox(width: 20,),
+                                 TextButton(onPressed: (){}, child: Text("Modifier",style: TextStyle(fontSize: 18.sp),)),
                               ],
                             ),
 
