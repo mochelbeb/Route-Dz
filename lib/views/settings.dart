@@ -1,4 +1,5 @@
 import '../utils/packs.dart';
+import 'profile.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class SettingsPage extends StatelessWidget {
           const Gap(30),
           Column(
             children: [
-              _colorTile(FontAwesomeIcons.user, "Compte"),
+              GestureDetector(child: _colorTile(FontAwesomeIcons.user, "Compte"),onTap: (){Get.to(MyProfilePage());},),
               _divider(),
               _colorTile(FontAwesomeIcons.language, "Changer de langue"),
               _divider(),
