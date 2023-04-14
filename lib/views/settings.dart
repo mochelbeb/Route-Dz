@@ -1,6 +1,6 @@
 import '../utils/packs.dart';
 import 'profile.dart';
-
+import 'language.dart';
 
 
 class SettingsPage extends StatelessWidget {
@@ -24,7 +24,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               GestureDetector(child: _colorTile(FontAwesomeIcons.user, "Compte"),onTap: (){Get.to(MyProfilePage());},),
               _divider(),
-              _colorTile(FontAwesomeIcons.language, "Changer de langue"),
+              GestureDetector(child: _colorTile(FontAwesomeIcons.language, "Changer de langue"),onTap: (){Get.to(Languagepage());},),
               _divider(),
               _colorTile(FontAwesomeIcons.file, "Conditions"),
               _divider(),
