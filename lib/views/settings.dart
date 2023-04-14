@@ -1,6 +1,8 @@
 import '../utils/packs.dart';
 import 'profile.dart';
 
+
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -12,7 +14,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 50, right: 40),
-            child: Text(
+            child: Text( 
               "Paramètres",
               style: Styles.headlineStyle1,
             ),
