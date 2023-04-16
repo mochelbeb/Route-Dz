@@ -1,5 +1,7 @@
 import '../utils/packs.dart';
 import 'profile.dart';
+import 'language.dart';
+
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 40, top: 50, right: 40),
-            child: Text(
+            child: Text( 
               "Paramètres",
               style: Styles.headlineStyle1,
             ),
@@ -22,7 +24,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               GestureDetector(child: _colorTile(FontAwesomeIcons.user, "Compte"),onTap: (){Get.to(MyProfilePage());},),
               _divider(),
-              _colorTile(FontAwesomeIcons.language, "Changer de langue"),
+              GestureDetector(child: _colorTile(FontAwesomeIcons.language, "Changer de langue"),onTap: (){Get.to(Languagepage());},),
               _divider(),
               _colorTile(FontAwesomeIcons.file, "Conditions"),
               _divider(),
