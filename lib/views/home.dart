@@ -207,7 +207,7 @@ class HomePage extends StatelessWidget {
                               ),
                               SizedBox(height: 0.0509*w,),
                               // ! SORT BY
-                              Text("Sort by",style: Styles.subtitle,),
+                              Text("Trié par",style: Styles.subtitle,),
                               // ! buttons
                                Padding(
                                 padding: EdgeInsets.all(0.0203 * w),
@@ -376,7 +376,7 @@ class HomePage extends StatelessWidget {
                                           )
                                         )
                                       ),
-                                      child: Text("last 24h")
+                                      child: Text("dernières 24h")
                                     )),
                                     Obx(() => ElevatedButton(
                                       onPressed: week_btn.value ?(){
@@ -399,7 +399,7 @@ class HomePage extends StatelessWidget {
                                           )
                                         )
                                       ),
-                                      child: const Text("last week")
+                                      child: const Text("la semaine passée")
                                     )),
                                   ],
                                 )
@@ -426,7 +426,7 @@ class HomePage extends StatelessWidget {
                                         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(0.38*w, 50),
                                       ),
-                                      child: const Text("Clear"), 
+                                      child: const Text("Supprimer"), 
                                     ),
                                     OutlinedButton(
                                       onPressed: (){}, 
@@ -435,7 +435,7 @@ class HomePage extends StatelessWidget {
                                         foregroundColor: const Color.fromRGBO(36, 160, 237, 1),
                                         backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                       ),
-                                      child: const Text("Apply"),                                    
+                                      child: const Text("Appliquer"),                                    
                                     ),
                                   ],
                                 ),
