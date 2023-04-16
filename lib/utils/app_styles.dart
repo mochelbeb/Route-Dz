@@ -7,5 +7,6 @@ class Styles {
   static TextStyle headlineStyle1 = TextStyle (fontSize: 26 , color : textColor , fontWeight: FontWeight.bold);
   static TextStyle textStyle_revese = TextStyle (fontSize: 16 , color : bgColor , fontWeight: FontWeight.w500);
   static TextStyle title = TextStyle (fontSize: 30.sp , color : Color.fromRGBO(6, 40, 61, 1) , fontWeight: FontWeight.bold);
+  static TextStyle subtitle = TextStyle (fontSize: 20.sp , color : Color.fromRGBO(6, 40, 61, 1) , fontWeight: FontWeight.bold);
 
 }
