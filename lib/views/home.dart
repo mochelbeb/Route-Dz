@@ -27,9 +27,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    print("width : $w");
-    print("80 % width : ${0.8*w}");
-
     return SafeArea(
       child: Stack(
         children: [
@@ -82,7 +79,7 @@ class HomePage extends StatelessWidget {
                 textCapitalization: TextCapitalization.none,
                 obscureText: false,
                 decoration: InputDecoration(
-                  hintText: 'Search..',
+                  hintText: 'Rechercher',
                   hintStyle: TextStyle(fontFamily: "Roboto" ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(

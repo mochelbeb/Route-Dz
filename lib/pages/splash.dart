@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       showLoader: true,
-      loadingText: Text("Loading..."),
+      loadingText: Text("Chargement en cours..."),
       navigator: widget.alreadySeen ? LoginPage() : IntroductionScreen(),
       durationInSeconds: 5,
     );

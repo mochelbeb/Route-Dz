@@ -61,7 +61,7 @@ class _Info_suppState extends State<Info_supp> {
                     )
                   ),
                   onPressed: (){Get.back();},
-                  child: Text("Cancel")),
+                  child: Text("Annuler")),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
@@ -78,7 +78,7 @@ class _Info_suppState extends State<Info_supp> {
                     )
                   ),
                   onPressed: _isButtonDisable ? null : (){},
-                  child: Text("Submit")),
+                  child: Text("Envoyer")),
               ],
             ),
           ),
