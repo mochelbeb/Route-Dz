@@ -14,8 +14,7 @@ Future<void> main(List<String> args) async {
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
-        //home: SplashScreen(alreadySeen : alreadySeen),
-        home: MyProfilePage(),
+        home: SplashScreen(alreadySeen : alreadySeen),
       );
     },
   ));

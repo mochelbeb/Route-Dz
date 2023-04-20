@@ -57,7 +57,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 const SizedBox(height: 16),
                 // ! Get Started
                 ElevatedButton(
-                  child: Text('Get started'),
+                  child: Text('Commencer'),
                   onPressed: _enabled ? () async {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     await prefs.setBool('alreadySeen', true);

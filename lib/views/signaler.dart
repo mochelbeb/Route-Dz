@@ -1,3 +1,5 @@
+import 'package:responsive_sizer/responsive_sizer.dart';
+
 import '../utils/packs.dart';
 
 
@@ -35,92 +37,6 @@ class _SignalerFormState extends State<SignalerForm> {
         backgroundColor: Colors.white,
         
       ),
-      /*body :
-      Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-          children: [            
-            SizedBox(
-              height: 25,
-            ),
-            Container(margin : EdgeInsets.only(left: 15),child: Text("Ajouter une localisation : ",style: TextStyle(fontFamily: "Raleway",fontSize: 18.sp),)),
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: SizedBox(
-                height: 25.h,
-                width: 80.w,
-                child: Card(
-                  elevation: 15.0,
-                  color: Color.fromARGB(255, 194, 217, 218),
-                  child: Center(child: Text('Map')),
-                ),
-              ),
-            ),
-            SizedBox(height: 16,),
-            Center(
-              child: MyCustomButton_widget2(
-                text: "se Localiser",
-                onPressed: (){},
-                options: Button_Option(
-                elevation: 15,
-                textStyle: TextStyle(fontFamily: "Roboto",fontSize: 16.sp,color: Colors.white,fontWeight: FontWeight.w300),
-                height: 45,
-                width: 0.359 * width,
-                color: Color.fromRGBO(94, 129, 244, 1),
-              ),
-            )
-            ),
-            SizedBox(height: 32,),
-            Container(margin : EdgeInsets.only(left: 15),child: Text("Ou Ajouter les Cordonnées N et E: ",style: TextStyle(fontFamily: "Raleway",fontSize: 18.sp),)),
-            SizedBox(height: 16,),
-            Center(
-              child: Container(
-                width: 80.w,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: 30.w,
-                        child: TextField(
-                          controller: _Ncontroller,
-                          onChanged: (value){
-                            checkFields();
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
-                            ),
-                            labelText: 'N°',
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 30.w,
-                        child: TextField(
-                          controller: _Econtroller,
-                           onChanged: (value){
-                            checkFields();
-                           },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
-                            ),
-                            labelText: 'E°',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-              ),
-            ),
-          )
-        ],
-      ),
-      */
-      
       body: Stack(
         children: [
           // ! Map
@@ -156,7 +72,7 @@ class _SignalerFormState extends State<SignalerForm> {
                           textCapitalization: TextCapitalization.none,
                           obscureText: false,
                           decoration: InputDecoration(
-                            hintText: 'Search..',
+                            hintText: 'Rechercher',
                             hintStyle: TextStyle(fontFamily: "Roboto" ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: const BorderSide(
@@ -239,7 +155,7 @@ class _SignalerFormState extends State<SignalerForm> {
                     onPressed: (){},
                     options: Button_Option(
                       elevation: 15,
-                      textStyle: TextStyle(fontFamily: "Raleway",fontSize: 16,color: Colors.white,fontWeight: FontWeight.w800),
+                      textStyle: TextStyle(fontFamily: "Poppins",fontSize: 18.sp,color: Colors.white,fontWeight: FontWeight.w500),
                       height: 45,
                       width: 0.359 * width,
                       color: Color.fromRGBO(94, 129, 244, 1),
@@ -276,7 +192,7 @@ class _SignalerFormState extends State<SignalerForm> {
                     )
                   ),
                   onPressed: (){Get.back();},
-                  child: Text("Cancel")),
+                  child: Text("Annuler")),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
@@ -293,7 +209,7 @@ class _SignalerFormState extends State<SignalerForm> {
                     )
                   ),
                   onPressed:(){Get.to(Info_supp());},
-                  child: Text("Next")),
+                  child: Text("Suivant")),
               ],
             ),
           ),
