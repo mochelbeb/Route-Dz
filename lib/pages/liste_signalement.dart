@@ -92,7 +92,7 @@ class Liste_Signalement extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 21.sp,
                     color: Colors.black,
-                    fontWeight: FontWeight.bold,
+                    
                   ),
                 ),
         ),
