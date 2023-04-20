@@ -1,3 +1,5 @@
+import 'package:RouteDz/pages/Apropos.dart';
+
 import '../utils/packs.dart';
 import 'profile.dart';
 import 'language.dart';
@@ -31,54 +33,7 @@ class SettingsPage extends StatelessWidget {
               _colorTile(FontAwesomeIcons.lock, "Politique de confidentialité"),
               _divider(),
               GestureDetector(child: _colorTile(FontAwesomeIcons.circleInfo, "À propos"), onTap: (){
-                Get.bottomSheet(
-                  BottomSheet(
-                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25)
-                    ),
-                   ),
-                   onClosing: (){},
-                   builder: ((context) => Container(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(25)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                      Text(
-                        'À propos',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Route Dz',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Application mobile pour le signalement des \ndégradations routières en Algérie',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'v1.0.0',
-                        style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  ),
-                )))
-                );
+                Get.to(AboutPage());
               },),
               _divider(),
               _colorTile(FontAwesomeIcons.rightFromBracket, "Se déconnecter"),

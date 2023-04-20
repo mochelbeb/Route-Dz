@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../widgets/custom_buttons.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -18,6 +19,19 @@ class MyClass {
 
 class Liste_Signalement extends StatelessWidget {
   final _controller = TextEditingController();
+  
+  List<AssetImage> images = [
+    AssetImage("lib/assets/pn1.png"),
+    AssetImage("lib/assets/pn2.png"),
+    AssetImage("lib/assets/pn3.png"),
+    AssetImage("lib/assets/pn1.png"),
+    AssetImage("lib/assets/pn2.png"),
+    AssetImage("lib/assets/pn3.png"),
+    AssetImage("lib/assets/pn1.png"),
+    AssetImage("lib/assets/pn2.png"),
+
+  ];
+
   final List<MyClass> itemlist = [
     MyClass(
       titre: 'TYPE 1',
@@ -61,25 +75,34 @@ class Liste_Signalement extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar:  AppBar(
+        backgroundColor: Colors.white,
+        elevation: 5,
+        leading: IconButton(
+          icon: FaIcon(
+            FontAwesomeIcons.angleLeft ,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      title: Text(
+                  "Liste des signalements ",
+                  style: TextStyle(
+                    fontSize: 21.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+        ),
       body: Container(
-        color: Color.fromARGB(255, 221, 221, 221),
         child: Padding(
           padding: EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Gap(25),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0,bottom: 10.0,top: 10.0),
-                child: Text(
-                  "Liste des signalements ",
-                  style: TextStyle(
-                    fontSize: 22.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              const Gap(10),
               Padding(
                 padding: const EdgeInsets.only(left:10.0 , right: 10.0,bottom: 15.0),
                 child: Container(
@@ -89,7 +112,7 @@ class Liste_Signalement extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: w * 0.66,
+                        width: w * 0.7,
                         child: TextFormField(
                           controller: _controller,
                           onChanged: (_) => EasyDebounce.debounce('_controller',
@@ -129,7 +152,7 @@ class Liste_Signalement extends StatelessWidget {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Color.fromRGBO(230, 230, 230, 1),
                             prefixIcon: const Icon(
                               FontAwesomeIcons.magnifyingGlass,
                               size: 15,
@@ -180,11 +203,11 @@ class Liste_Signalement extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       color: Colors.white,
-                      elevation: 2.0,
+                      elevation: 10.0,
                       clipBehavior: Clip.hardEdge,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(12),
+                          Radius.circular(15),
                         ),
                       ),
                       margin: EdgeInsets.all(10),
@@ -194,10 +217,12 @@ class Liste_Signalement extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                height: 125,
+                                height: 100,
+                                margin: EdgeInsets.only(top: 12.5,left: 12.2),
                                 width: 150,
                                 decoration: BoxDecoration(
-                                  image: DecorationImage(image: AssetImage("lib/assets/image1.png"),fit: BoxFit.fill))
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(image: images[index],fit: BoxFit.fill))
                                 ),
                               SizedBox(width: 12),
                               Expanded(
