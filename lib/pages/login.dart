@@ -73,7 +73,7 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 25.0),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: Color(0xFF5E81F4),
+                      backgroundColor: Color(0xff5e81f4),
                       fixedSize: Size(width - 70, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
@@ -109,7 +109,7 @@ class LoginPage extends StatelessWidget {
                           child:  Text(
                         'Inscrivez vous',
                         style: TextStyle(
-                          color: const Color(0xFF5E81F4),
+                          color: const Color(0xff5e81f4),
                           fontSize: 15.5.sp,
                           fontWeight: FontWeight.bold,
                           //decoration: TextDecoration.underline,
