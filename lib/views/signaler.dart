@@ -1,7 +1,11 @@
+import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../components/Blackpoint.dart';
+import '../services/service.dart';
 import '../utils/packs.dart';
-
 
 class SignalerForm extends StatefulWidget {
   const SignalerForm({super.key});
@@ -12,6 +16,39 @@ class SignalerForm extends StatefulWidget {
 
 class _SignalerFormState extends State<SignalerForm> {
   final TextEditingController _controllerSearch = TextEditingController();
+  MapboxMapController? map_controller;
+  
+  Position? location;
+  
+  RxBool _islocated = false.obs;
+
+
+
+  _onMapCreated(MapboxMapController controller)async{
+    map_controller = controller;
+    Future.delayed(Duration(seconds: 3));
+    final ByteData bytes = await rootBundle.load("lib/assets/location.png");
+    final Uint8List list = bytes.buffer.asUint8List();
+    map_controller!.addImage("location-15",list);
+  }
+
+
+  
+  void _updateLocation() {
+    if (map_controller != null){
+      map_controller!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(location!.latitude, location!.longitude),zoom: 14.0)
+        )
+      );
+      map_controller!.addSymbol(SymbolOptions(
+        geometry: LatLng(location!.latitude, location!.longitude),
+        iconImage: "location-15",
+        iconSize: 0.15,
+      ));
+    }
+    _islocated.value = true;
+  }
 
   @override
   void dispose() {
@@ -45,7 +82,7 @@ class _SignalerFormState extends State<SignalerForm> {
             height: height,
             child: MapboxMap(
                 accessToken: "sk.eyJ1IjoibW9oYW1lZC1pc2xhbSIsImEiOiJjbGY5a2E0bmkyMjU4M3pudHhnOXlnYmFhIn0.19k4OxrqxtMQuQhXnyDO_Q",
-                onMapCreated: (c){},
+                onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(36.38214832844181, 3.8946823228767466),
                   zoom: 14.0, 
@@ -130,20 +167,6 @@ class _SignalerFormState extends State<SignalerForm> {
                           textAlign: TextAlign.justify,
                         ),
                       ),
-                      //* blue button 
-                      MyCustomButton_widget1(
-                        borderColor: Colors.transparent,
-                        borderRadius: 15,
-                        borderWidth: 1,
-                        buttonSize: 44,
-                        fillColor: Color(0xFF5E81F4),
-                        icon: FaIcon(
-                          FontAwesomeIcons.sliders,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed: () {},
-                      ),
                     ],
                   ),
                 ),
@@ -152,7 +175,13 @@ class _SignalerFormState extends State<SignalerForm> {
                   alignment: AlignmentDirectional(0,0.8),
                   child: MyCustomButton_widget2(
                     text: "se Localiser",
-                    onPressed: (){},
+                    onPressed: ()async{
+                      location = await Service.GetCurrentPosition();
+                      if(location != null){
+                        final Position _positionData = Get.put(location!); 
+                        _updateLocation();
+                      }
+                    },
                     options: Button_Option(
                       elevation: 15,
                       textStyle: TextStyle(fontFamily: "Poppins",fontSize: 18.sp,color: Colors.white,fontWeight: FontWeight.w500),
@@ -193,7 +222,7 @@ class _SignalerFormState extends State<SignalerForm> {
                   ),
                   onPressed: (){Get.back();},
                   child: Text("Annuler")),
-                OutlinedButton(
+                Obx(()=> OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
                     disabledForegroundColor: Color.fromARGB(255, 129, 129, 129),
@@ -208,8 +237,8 @@ class _SignalerFormState extends State<SignalerForm> {
                       )
                     )
                   ),
-                  onPressed:(){Get.to(Info_supp());},
-                  child: Text("Suivant")),
+                  onPressed: _islocated.isFalse ? null : (){Get.to(Info_supp());},
+                  child: Text("Suivant")),)
               ],
             ),
           ),

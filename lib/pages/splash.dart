@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../utils/packs.dart';
 
@@ -10,8 +11,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((user) { 
+      _user = user;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    print(_user);
     return EasySplashScreen(
       logo:Image.asset("lib/assets/routedz.png"),
       title: Text(
@@ -24,7 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       showLoader: true,
       loadingText: Text("Chargement en cours..."),
-      navigator: widget.alreadySeen ? LoginPage() : IntroductionScreen(),
+      navigator: widget.alreadySeen 
+      ? _user == null
+        ? LoginPage()
+        : MyHomePage()
+      : IntroductionScreen(),
       durationInSeconds: 5,
     );
   }

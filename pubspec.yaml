@@ -49,6 +49,11 @@ dependencies:
   flutter_svg: ^2.0.4
   shared_preferences: ^2.0.20
   page_view_dot_indicator: ^2.1.0
+  firebase_auth: ^4.4.2
+  firebase_core: ^2.10.0
+  cloud_firestore: ^4.5.2
+  flutter_map: ^3.1.0
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
@@ -62,10 +67,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.11.0
 
-flutter_icons:
-  android: true
+flutter_launcher_icons:
+  android: "launcher_icon"
   ios: true
-  image_path: "lib/assets/routedz.png"
+  image_path: "lib/assets/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -87,6 +93,10 @@ flutter:
     - lib/assets/pn2.png
     - lib/assets/pn3.png
     - lib/assets/pn4.png
+    - lib/assets/alert.svg
+    - lib/assets/warning.png
+    - lib/assets/location.png
+
 
 
     - lib/assets/profile_img.jpeg

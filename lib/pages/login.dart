@@ -1,18 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../Client/Auth/Auth.dart';
 import '../utils/packs.dart';
 
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  // controllers var
+  RxBool isLoading = false.obs; 
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    
+    print(isLoading.value);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -39,7 +46,7 @@ class LoginPage extends StatelessWidget {
               const Gap(20),
 
               MyTextField(
-                controller: usernameController,
+                controller: emailController,
                 hintText: 'Email',
                 obscureText: false,
               ),
@@ -71,21 +78,26 @@ class LoginPage extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.only(left: 25.0),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
+                child: 
+                  Obx(()=>OutlinedButton(
+                    style: OutlinedButton.styleFrom(
                       backgroundColor: Color(0xFF5E81F4),
                       fixedSize: Size(width - 70, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       )
                     ),
-                    onPressed: (){
-                      Get.to(MyHomePage());
+                    onPressed: () async {
+                      isLoading.value = true;
+                      UserCredential? user = await loginWithEmail(emailController.text,passwordController.text);
+                      isLoading.value = false;
                     },
-                    child: Text("Se connecter" , 
-                    style: TextStyle( color: Colors.white,fontSize: 18.sp,fontWeight: FontWeight.w600,), ),
+                    child: isLoading.value
+                    ? CircularProgressIndicator(color: Colors.white,)
+                    : Text("Se connecter" , 
+                            style: TextStyle( color: Colors.white,fontSize: 18.sp,fontWeight: FontWeight.w600,), ),
                     ),
-              ),
+              )),
 
               const Gap(15),
 
