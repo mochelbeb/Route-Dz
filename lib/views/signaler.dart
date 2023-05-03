@@ -223,7 +223,7 @@ class _SignalerFormState extends State<SignalerForm> {
                   onPressed: (){Get.back();},
 
                   child: Text("Annuler",style: TextStyle(color: Color(0xff5e81f4)),)),
-                OutlinedButton(
+                Obx (() => OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
                     disabledForegroundColor: Color.fromARGB(255, 129, 129, 129),
@@ -239,7 +239,7 @@ class _SignalerFormState extends State<SignalerForm> {
                     )
                   ),
                   onPressed: _islocated.isFalse ? null : (){Get.to(Info_supp());},
-                  child: Text("Suivant")),
+                  child: Text("Suivant")),)
               ],
             ),
           ),
