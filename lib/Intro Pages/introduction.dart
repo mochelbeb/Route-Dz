@@ -52,12 +52,15 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   currentItem: _currentPage,
                   count: _pages.length,
                   unselectedColor: Colors.black26,
-                  selectedColor: Colors.blue,
+                  selectedColor: Color(0xff5e81f4),
                 ),
                 const SizedBox(height: 16),
                 // ! Get Started
                 ElevatedButton(
                   child: Text('Commencer'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xff5e81f4)
+                  ),
                   onPressed: _enabled ? () async {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     await prefs.setBool('alreadySeen', true);

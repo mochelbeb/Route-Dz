@@ -19,7 +19,7 @@ class MyClass {
 
 class Liste_Signalement extends StatelessWidget {
   final _controller = TextEditingController();
-  
+
   List<AssetImage> images = [
     AssetImage("lib/assets/pn1.png"),
     AssetImage("lib/assets/pn2.png"),
@@ -29,7 +29,6 @@ class Liste_Signalement extends StatelessWidget {
     AssetImage("lib/assets/pn3.png"),
     AssetImage("lib/assets/pn1.png"),
     AssetImage("lib/assets/pn2.png"),
-
   ];
 
   final List<MyClass> itemlist = [
@@ -75,27 +74,26 @@ class Liste_Signalement extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 5,
         leading: IconButton(
           icon: FaIcon(
-            FontAwesomeIcons.angleLeft ,
+            FontAwesomeIcons.angleLeft,
             color: Colors.black,
           ),
           onPressed: () {
             Get.back();
           },
         ),
-      title: Text(
-                  "Liste des signalements ",
-                  style: TextStyle(
-                    fontSize: 21.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+        title: Text(
+          "Liste des signalements ",
+          style: TextStyle(
+            fontSize: 21.sp,
+            color: Colors.black,
+          ),
         ),
+      ),
       body: Container(
         child: Padding(
           padding: EdgeInsets.all(15),
@@ -104,7 +102,8 @@ class Liste_Signalement extends StatelessWidget {
             children: [
               const Gap(10),
               Padding(
-                padding: const EdgeInsets.only(left:10.0 , right: 10.0,bottom: 15.0),
+                padding: const EdgeInsets.only(
+                    left: 10.0, right: 10.0, bottom: 15.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: Row(
@@ -196,77 +195,245 @@ class Liste_Signalement extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: h * 0.75,
-                child: ListView.builder(
-                  itemCount: 7,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      color: Colors.white,
-                      elevation: 10.0,
-                      clipBehavior: Clip.hardEdge,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+              GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      ),
-                      margin: EdgeInsets.all(10),
-                      child: Container(
-                        height: 125,
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 100,
-                                margin: EdgeInsets.only(top: 12.5,left: 12.2),
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(image: images[index],fit: BoxFit.fill))
-                                ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top:10.0),
-                                  child: ListTile(
-                                    title: Text(
-                                      itemlist[index].titre,
-                                      style: TextStyle(fontSize: 20.sp),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            FontAwesomeIcons.locationDot,
-                                            color:
-                                                Color.fromARGB(255, 35, 98, 68),
-                                            size: 15,
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => SizedBox(
+                            height: 700,
+                            child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    const Gap(10),
+                                    Container(
+                                      width: 400.0,
+                                      height: 200.0,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                            width: 2.0,
                                           ),
-                                          const Gap(5),
-                                          Expanded(
-                                            child: Text(
-                                              itemlist[index].localisation,
-                                              style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 35, 98, 68)),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: PageView(
+                                        children: <Widget>[
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                              'lib/assets/image1.png',
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                              'lib/assets/image1.png',
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                              'lib/assets/image1.png',
+                                              fit: BoxFit.fill,
+                                            ),
+                                          )
                                         ],
                                       ),
-                                      Text(itemlist[index].discription),
-                                    ]),
+                                    ),
+                                    const Gap(20),
+                                    Center(
+                                      child: Text(
+                                        "type du signalement",
+                                        style: TextStyle(
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                    const Gap(20),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Localisation",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 23,
+                                          ),
+                                        ),
+                                        TextField(
+                                          minLines: 1,
+                                          maxLines: 2,
+                                          controller: TextEditingController(
+                                              text:
+                                                  "la localisation exacte du point noir"),
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.white,
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType: TextInputType.text,
+                                          autofocus: true,
+                                          obscureText: false,
+                                        ),
+                                        const Gap(20),
+                                        Text(
+                                          "Discription",
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize: 23,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          child: TextField(
+                                            readOnly: true,
+                                            minLines: 3,
+                                            maxLines: 7,
+                                            controller: TextEditingController(
+                                                text:
+                                                    "la discription du point noir "),
+                                            enabled: false,
+                                            decoration: InputDecoration(
+                                              fillColor: Colors.white,
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            keyboardType: TextInputType.text,
+                                            autofocus: true,
+                                            obscureText: false,
+                                          ),
+                                        ),
+                                        const Gap(30),
+                                        Row(children: [
+                                          const Gap(25),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              FontAwesomeIcons.check,
+                                              color: Color.fromARGB(
+                                                  255, 35, 98, 68),
+                                              size: 25,
+                                            ),
+                                          ),
+                                          const Gap(230),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              FontAwesomeIcons.comment,
+                                              color: Color.fromARGB(
+                                                  255, 35, 98, 68),
+                                              size: 25,
+                                            ),
+                                          ),
+                                        ]),
+                                        const Gap(15),
+                                        Row(
+                                          children: [
+                                            const Gap(25),
+                                            Text(
+                                              "Valider",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                            const Gap(215),
+                                            Text(
+                                              "Commenter",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ))));
+                  },
+                  child: SizedBox(
+                    height: h * 0.75,
+                    child: ListView.builder(
+                      itemCount: 7,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          color: Colors.white,
+                          elevation: 10.0,
+                          clipBehavior: Clip.hardEdge,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          margin: EdgeInsets.all(10),
+                          child: Container(
+                            height: 125,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    height: 100,
+                                    margin:
+                                        EdgeInsets.only(top: 12.5, left: 12.2),
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                            image: images[index],
+                                            fit: BoxFit.fill))),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: ListTile(
+                                      title: Text(
+                                        itemlist[index].titre,
+                                        style: TextStyle(fontSize: 20.sp),
+                                      ),
+                                      subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  FontAwesomeIcons.locationDot,
+                                                  color: Color.fromARGB(
+                                                      255, 35, 98, 68),
+                                                  size: 15,
+                                                ),
+                                                const Gap(5),
+                                                Expanded(
+                                                  child: Text(
+                                                    itemlist[index]
+                                                        .localisation,
+                                                    style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255, 35, 98, 68)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(itemlist[index].discription),
+                                          ]),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                    );
-                  },
-                ),
-              )
+                        );
+                      },
+                    ),
+                  )),
             ],
           ),
         ),
