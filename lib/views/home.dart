@@ -279,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
@@ -362,7 +362,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
@@ -387,7 +387,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
@@ -423,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: const Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: const Color(0xff5e81f4),
                                         backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
@@ -446,7 +446,7 @@ class _HomePageState extends State<HomePage> {
                                         elevation: 0.0,
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
-                                        disabledBackgroundColor: Color.fromRGBO(36, 160, 237, 1.0),
+                                        disabledBackgroundColor: Color(0xff5e81f4),
                                         backgroundColor: Color.fromRGBO(204, 204, 204, 1),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(

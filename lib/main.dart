@@ -85,14 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: SizedBox(
         height: 10.h,
         child: BottomNavigationBar(
-          selectedItemColor: const Color.fromRGBO(94, 129, 244, 1.0),
+          selectedItemColor: const Color(0xff5e81f4),
           unselectedItemColor: const Color.fromRGBO(77, 77, 89, 1.0),
           unselectedLabelStyle: const TextStyle(
               color: Color.fromRGBO(77, 77, 89, 1.0),
               fontFamily: "Roboto",
               fontWeight: FontWeight.normal),
           selectedLabelStyle: const TextStyle(
-              color: Color.fromRGBO(94, 129, 244, 1.0),
+              color: Color(0xff5e81f4),
               fontFamily: "Roboto",
               fontWeight: FontWeight.w500),
           iconSize: 23.sp,

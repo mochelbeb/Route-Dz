@@ -216,29 +216,30 @@ class _SignalerFormState extends State<SignalerForm> {
                       borderRadius: BorderRadius.circular(22.5),
                       side: BorderSide(
                         width: 3.0,
-                        color: Colors.cyan,
+                        color: Color(0xff5e81f4),
                       )
                     )
                   ),
                   onPressed: (){Get.back();},
-                  child: Text("Annuler")),
-                Obx(()=> OutlinedButton(
+
+                  child: Text("Annuler",style: TextStyle(color: Color(0xff5e81f4)),)),
+                OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     disabledBackgroundColor:Color.fromARGB(255, 224, 224, 224) ,
                     disabledForegroundColor: Color.fromARGB(255, 129, 129, 129),
                     foregroundColor: Colors.white,
                     textStyle: TextStyle(color: Colors.white),
-                    backgroundColor: Color.fromRGBO(33, 150, 243, 1.0),
+                    backgroundColor: Color(0xff5e81f4),
                     fixedSize: Size(width/2 - 30, 40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(22.5),
                       side: BorderSide(
-                        color: Colors.cyan,
+                        color: Color(0xff5e81f4),
                       )
                     )
                   ),
                   onPressed: _islocated.isFalse ? null : (){Get.to(Info_supp());},
-                  child: Text("Suivant")),)
+                  child: Text("Suivant")),
               ],
             ),
           ),
