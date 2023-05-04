@@ -98,7 +98,7 @@ class _SignupPageState extends State<SignupPage> {
               const Gap(10),
 
               MyTextField(
-                controller: passwordController,
+                controller: repeatPasswordcontroller,
                 hintText: 'Confirmer le mot de passe',
                 obscureText: true,
               ),
@@ -143,14 +143,17 @@ class _SignupPageState extends State<SignupPage> {
                         isLoading.value = false;
                       }
                       else if(!_isChecked){
+                        isLoading.value = false;
                         Get.defaultDialog(
                           content: Text("Veillez acceptez les conditionds d'utilisation \net de la politique de confidentialité"),
                           cancel: TextButton(onPressed: (){Get.back();}, child: Text("retour"))
                         );
                       }
                       else{
+                        isLoading.value = false;
                         Get.defaultDialog(
-                          content: Text("Mot de pass invalid"),
+                          title: "Mot de pass invalid",
+                          content: Text("règles de mot de passe : \nau moins 8 caractères \nau moins 1 lettre majuscule \nau moins 1 lettre minuscule \nau moins 1 chiffre"),
                           cancel: TextButton(onPressed: (){Get.back();}, child: Text("retour"))
                         );
                       }
