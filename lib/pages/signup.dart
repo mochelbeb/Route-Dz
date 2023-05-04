@@ -1,5 +1,9 @@
+import 'package:RouteDz/Client/Auth/handle.dart';
+import 'package:RouteDz/controllers/validators.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../Client/Auth/Auth.dart';
 import '../utils/packs.dart';
 
 class SignupPage extends StatefulWidget {
@@ -10,13 +14,20 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  late TextEditingController usernameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController repeatPasswordcontroller;
+
   late bool _isChecked;
+  RxBool isLoading = false.obs;
+  
   
   @override
   void dispose() {
     usernameController.dispose();
+    emailController.dispose();
+    repeatPasswordcontroller.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -24,6 +35,10 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     super.initState();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
+    emailController = TextEditingController();
+    repeatPasswordcontroller = TextEditingController();
     _isChecked = false;
   }
   
@@ -67,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
               const Gap(10),
 
               MyTextField(
-                controller: usernameController,
+                controller: emailController,
                 hintText: 'Email',
                 obscureText: false,
               ),
@@ -111,7 +126,8 @@ class _SignupPageState extends State<SignupPage> {
 
               Padding(
                 padding: const EdgeInsets.only(left: 25.0),
-                child: OutlinedButton(
+                child: 
+                Obx(()=>OutlinedButton(
                   style: OutlinedButton.styleFrom(
                       backgroundColor: Color(0xFF5E81F4),
                       fixedSize: Size(width - 70, 60),
@@ -119,12 +135,31 @@ class _SignupPageState extends State<SignupPage> {
                         borderRadius: BorderRadius.circular(50),
                       )
                     ),
-                    onPressed: (){
-                      Get.to(MyHomePage());
+                    onPressed: () async {
+                      isLoading.value = true;
+                      bool validation = OnPressSignupHandle(emailController.text, passwordController.text, repeatPasswordcontroller.text);
+                      if (validation && _isChecked){
+                        UserCredential? new_user = await SignupWithInfos(usernameController.text,emailController.text,passwordController.text);
+                        isLoading.value = false;
+                      }
+                      else if(!_isChecked){
+                        Get.defaultDialog(
+                          content: Text("Veillez acceptez les conditionds d'utilisation \net de la politique de confidentialité"),
+                          cancel: TextButton(onPressed: (){Get.back();}, child: Text("retour"))
+                        );
+                      }
+                      else{
+                        Get.defaultDialog(
+                          content: Text("Mot de pass invalid"),
+                          cancel: TextButton(onPressed: (){Get.back();}, child: Text("retour"))
+                        );
+                      }
                     },
-                    child: Text("S'inscrire" , style:TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,),
+                    child: isLoading.value
+                    ? CircularProgressIndicator(color: Colors.white,)
+                    : Text("S'inscrire" , style:TextStyle( color: Colors.white,fontSize: 18,fontWeight: FontWeight.w600,),
                 ),
-                          ),
+              )),
               ),
           ],
         ),

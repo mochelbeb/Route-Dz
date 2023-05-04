@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../components/Blackpoint.dart';
 import '../widgets/custom_buttons.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:gap/gap.dart';
@@ -20,6 +21,7 @@ class MyClass {
 class Liste_Signalement extends StatelessWidget {
   final _controller = TextEditingController();
 
+  final List<BlackPoint> blackPoints = Get.find();
   List<AssetImage> images = [
     AssetImage("lib/assets/pn1.png"),
     AssetImage("lib/assets/pn2.png"),
@@ -72,6 +74,7 @@ class Liste_Signalement extends StatelessWidget {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    print(blackPoints);
 
     return Scaffold(
       appBar: AppBar(
@@ -362,7 +365,7 @@ class Liste_Signalement extends StatelessWidget {
                   child: SizedBox(
                     height: h * 0.75,
                     child: ListView.builder(
-                      itemCount: 7,
+                      itemCount: blackPoints.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
                           color: Colors.white,
@@ -395,7 +398,7 @@ class Liste_Signalement extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: ListTile(
                                       title: Text(
-                                        itemlist[index].titre,
+                                        blackPoints[index].type,
                                         style: TextStyle(fontSize: 20.sp),
                                       ),
                                       subtitle: Column(
@@ -413,8 +416,7 @@ class Liste_Signalement extends StatelessWidget {
                                                 const Gap(5),
                                                 Expanded(
                                                   child: Text(
-                                                    itemlist[index]
-                                                        .localisation,
+                                                    blackPoints[index].coordinate.toString(),
                                                     style: TextStyle(
                                                         color: Color.fromARGB(
                                                             255, 35, 98, 68)),
@@ -422,7 +424,7 @@ class Liste_Signalement extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                            Text(itemlist[index].discription),
+                                            Text(blackPoints[index].description),
                                           ]),
                                     ),
                                   ),

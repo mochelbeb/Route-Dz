@@ -1,13 +1,30 @@
+import 'dart:typed_data';
+
+import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
+import 'package:RouteDz/components/Blackpoint.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../utils/packs.dart';
 
-class HomePage extends StatelessWidget {
+
+
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   var type_list = ["type1","type2","type3","type4","type5"]; // la liste des types 
 
-  HomePage({super.key});
+
+  late TextEditingController _controller;
+  MapboxMapController? mapController;
 
 
-  final _controller = TextEditingController();
   // Sort By buttons boolean for switch
   RxBool proximite_btn = true.obs;
   RxBool recent_btn = false.obs;
@@ -22,11 +39,56 @@ class HomePage extends StatelessWidget {
   RxBool hours_btn = false.obs;
   RxBool week_btn = true.obs;
 
+  List<Symbol> symbol_list = [];
+
+  void _onMapCreated(MapboxMapController controller)async{
+    mapController = controller;
+    final ByteData bytes = await rootBundle.load("lib/assets/warning.png");
+    final Uint8List list = bytes.buffer.asUint8List();
+    mapController!.addImage("warning-15",list);
+    AddBlackPoints();
+  }
+
+  AddBlackPoints()async{
+    List<BlackPoint> BlackPoints = await FirestoreService.getBlackPoints();
+    final List<BlackPoint> _data = Get.put(BlackPoints);
+    BlackPoints.forEach((pn) {
+      Symbol new_sym = Symbol(
+        pn.id as String,
+        SymbolOptions(
+        geometry: LatLng(pn.coordinate.latitude, pn.coordinate.longitude),
+        iconImage: "warning-15",
+        iconSize: 0.15,
+      ));
+      symbol_list.add(new_sym);
+      mapController!.addSymbol(new_sym.options);
+    });   
+    print("test 3 success");
+  }
+  _zoomChanges(){
+    if(mapController != null){
+      double zoom = mapController!.cameraPosition!.zoom;
+      double symbolSize = BlackPoint.calculateSymbolSize(zoom);
+
+      symbol_list.forEach((symbol) {
+        mapController!.updateSymbol(symbol, SymbolOptions(
+          iconSize: symbolSize
+        ));
+      });
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _controller = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    print(FirebaseAuth.instance.currentUser);
     return SafeArea(
       child: Stack(
         children: [
@@ -37,8 +99,8 @@ class HomePage extends StatelessWidget {
               width: w,
               height: h * 1,
               child: MapboxMap(
-                accessToken: "sk.eyJ1IjoibW9oYW1lZC1pc2xhbSIsImEiOiJjbGY5a2E0bmkyMjU4M3pudHhnOXlnYmFhIn0.19k4OxrqxtMQuQhXnyDO_Q",
-                onMapCreated: (c){},
+                accessToken: "pk.eyJ1IjoibW9oYW1lZC1pc2xhbSIsImEiOiJjbGY5anVqd2UwcDF5NDFvMmJkZ2FrY3lpIn0.ezIz0mx77wVotsq9Z8C0qg",
+                onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: LatLng(36.38214832844181, 3.8946823228767466),
                   zoom: 14.0, 
@@ -407,7 +469,7 @@ class HomePage extends StatelessWidget {
                               // ! buttons
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(25,8,25,8),
-                                child: DropDownButton(dropdownValues: type_list),
+                                child: DropDownButton(dropdownValues: type_list,onSelectedValue: (v){},),
                               ),
                               // ! Apply buttons
                               SizedBox(height: 0.076*w),
@@ -477,8 +539,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
-// class selectedController extends GetxController{
-//   RxInt _sortby = 1.obs;
-// }

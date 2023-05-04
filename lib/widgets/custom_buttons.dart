@@ -342,8 +342,9 @@ extension _WithoutColorExtension on TextStyle {
 
 
 class DropDownButton extends StatefulWidget {
-  DropDownButton({super.key , required this.dropdownValues});
+  DropDownButton({super.key , required this.dropdownValues , required this.onSelectedValue});
   List<String> dropdownValues;
+  final ValueChanged<String> onSelectedValue;
 
 
   @override
@@ -352,6 +353,7 @@ class DropDownButton extends StatefulWidget {
 
 class _DropDownButtonState extends State<DropDownButton> {
   String _selectedValue = "";
+  
   @override
   void initState() {
     _selectedValue = widget.dropdownValues[0];
@@ -385,6 +387,7 @@ class _DropDownButtonState extends State<DropDownButton> {
             setState(() {
               _selectedValue = newValue!;
             });
+            widget.onSelectedValue(newValue!);
   }
         )));
   }

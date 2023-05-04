@@ -1,3 +1,4 @@
+import 'package:RouteDz/Client/Auth/Auth.dart';
 import 'package:RouteDz/pages/Apropos.dart';
 
 import '../utils/packs.dart';
@@ -37,7 +38,7 @@ class SettingsPage extends StatelessWidget {
                 Get.to(AboutPage());
               },),
               _divider(),
-              _colorTile(FontAwesomeIcons.rightFromBracket, "Se déconnecter"),
+              GestureDetector(child: _colorTile(FontAwesomeIcons.rightFromBracket, "Se déconnecter"), onTap: SignOut,),
             ],
           ),
         ],

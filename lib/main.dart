@@ -1,4 +1,6 @@
 import 'package:RouteDz/views/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'utils/packs.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -8,8 +10,9 @@ Future<void> main(List<String> args) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
   bool alreadySeen = prefs.getBool('alreadySeen') ?? false;
-
+  
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
@@ -51,7 +54,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     if (index == 1){
-      Get.to(SignalerForm());
+      print(FirebaseAuth.instance.currentUser);
+      if(FirebaseAuth.instance.currentUser == null){
+        Get.defaultDialog(
+          title: "Utilisateur non connecté",
+          content: Text('vous devez vous connecter pour signaler un nouveau point noir'),
+          actions: [
+            TextButton(onPressed: (){Get.back();}, child: Text("Cancel")),
+            TextButton(onPressed: (){Get.to(LoginPage());}, child: Text("Login"))
+          ]
+        );
+      }
+      else{
+        Get.to(SignalerForm());
+      }
     }else{
       setState(() {
         _selectedIndex = index;

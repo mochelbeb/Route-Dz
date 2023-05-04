@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "637597347381",
+    "project_id": "routedz",
+    "storage_bucket": "routedz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637597347381:android:fe6d8dca4c9ded5fb08b7c",
+        "android_client_info": {
+          "package_name": "com.example.routedz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637597347381-lqdpf463dgeo6nrfbiokm6mubcsdkldk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.routedz",
+            "certificate_hash": "7f765a436fb1df44044dc76b6fa881023f4e3874"
+          }
+        },
+        {
+          "client_id": "637597347381-gvunc7akd2vricj2bcmtva0sqif6g2tj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABHXZC-jZfn3pRp8xWhhOPOnCjhYDS5Ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637597347381-gvunc7akd2vricj2bcmtva0sqif6g2tj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

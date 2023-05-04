@@ -1,3 +1,6 @@
+import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
+import 'package:RouteDz/components/Blackpoint.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../utils/packs.dart';
 
@@ -12,8 +15,11 @@ class Info_supp extends StatefulWidget {
 
 class _Info_suppState extends State<Info_supp> {
   final _controllerDescription = TextEditingController();
-  List<String> type_list  = ["type1","type2","type3","type4","type5"];
+  List<String> type_list  = ["Nid-de-poule","Erosion","Déformation","Manque d'éclairage","Manque de Signalisation"];
   late bool _isButtonDisable;
+  String _selectedItem = "";
+
+  Position location = Get.find();
 
 
   @override
@@ -23,6 +29,7 @@ class _Info_suppState extends State<Info_supp> {
   }
   @override
   void initState() {
+    _selectedItem = type_list[0];
     _isButtonDisable = true;
     super.initState();
   }
@@ -31,6 +38,7 @@ class _Info_suppState extends State<Info_supp> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    print(location.toString());
     return Scaffold(
       bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -77,7 +85,22 @@ class _Info_suppState extends State<Info_supp> {
                       )
                     )
                   ),
-                  onPressed: _isButtonDisable ? null : (){},
+                  onPressed: _isButtonDisable ? null : () async {
+                    BlackPoint new_bp = BlackPoint(coordinate: LatLng(location.latitude, location.longitude), date: DateTime.now(), type: _selectedItem, pictures: ["pictures"], description: _controllerDescription.text, comments: ["comments"], etat: "En Attente");
+                    await FirestoreService.addBN(new_bp);
+                    Get.defaultDialog(
+                      title: "Point noir ajouté avec Succée",
+                      content: null,
+                      actions: [
+                        TextButton(onPressed: (){
+                          Get.back();
+                          Get.back();
+                          Get.back();
+                        }, child: Text("OK"))
+                      ]
+                    );
+
+                  },
                   child: Text("Envoyer")),
               ],
             ),
@@ -105,88 +128,98 @@ class _Info_suppState extends State<Info_supp> {
           }, icon: FaIcon(FontAwesomeIcons.circleInfo,color: Colors.black,))
         ],
       ),
-      body: Container(
-            width: width,
-            height: height,
-            margin: EdgeInsets.only(top: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //* title
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text("Signalement d'un point noir:",style:TextStyle(fontFamily: "Poppins",fontSize: 18.sp,)),
-              ),
-              SizedBox(height: 2.35.h,),
-              //* Image 
-              GestureDetector(
-                onTap: (){
-                  Get.defaultDialog(
-                    title: "Ajouter des Photos",
-                    content: Text("Ajouter des photos de votre point noir ici"),
-                    confirm: TextButton(onPressed: (){Get.back();},
-                    child: Text("Confirmer")));
-                },
-                child: Container(
-                  height: 0.332 * height,
-                  width: width,
-                  margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Colors.black12
-                  ),
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children : [
-                      FaIcon(FontAwesomeIcons.camera,),
-                      Text("Ajouter des photos",style: TextStyle(fontFamily: "Roboto"),)
-                          ]),
-                  ),
-                  
+      body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Container(
+              width: width,
+              height: height,
+              margin: EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //* title
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text("Signalement d'un point noir:",style:TextStyle(fontFamily: "Poppins",fontSize: 18.sp,)),
                 ),
-              ),
-              SizedBox(height: 2.35.h,),
-              //* Type Text
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text("Choisir un type :", style: Styles.textStyle),
-              ),
-              //* Type Dropdown
-              SizedBox(height: 2.35.h,),
-              Padding(
-                padding: const EdgeInsets.only(left: 15,right: 15),
-                child: DropDownButton(dropdownValues: type_list),
-              ),
-              //* Description text
-              SizedBox(height: 2.35.h,),
-              Padding(padding: EdgeInsets.only(left: 15),child: Text("Ajouter une description : ",style: Styles.textStyle,),),
-              //* Description Text Area
-              SizedBox(height: 2.35.h,),
-              Padding(
-                padding: const EdgeInsets.only(left: 15,right: 15),
-                child: TextField(
-                  controller: _controllerDescription,
-                  onChanged: (value){
-                    setState(() {
-                      if (value.isEmpty){
-                        _isButtonDisable = true;
-                      }
-                      else _isButtonDisable = false;
-                    });
+                SizedBox(height: 2.35.h,),
+                //* Image 
+                GestureDetector(
+                  onTap: (){
+                    Get.defaultDialog(
+                      title: "Ajouter des Photos",
+                      content: Text("Ajouter des photos de votre point noir ici"),
+                      confirm: TextButton(onPressed: (){Get.back();},
+                      child: Text("Confirmer")));
                   },
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: "Ajouter une breve description du point noir et l'adresse .. etc ",
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black,width: 1.5),borderRadius: BorderRadius.all(Radius.circular(15)))
+                  child: Container(
+                    height: 0.332 * height,
+                    width: width,
+                    margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      color: Colors.black12
+                    ),
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children : [
+                        FaIcon(FontAwesomeIcons.camera,),
+                        Text("Ajouter des photos",style: TextStyle(fontFamily: "Roboto"),)
+                            ]),
+                    ),
+                    
                   ),
-                  keyboardType: TextInputType.text,
-              
                 ),
-              ),
-            ],
+                SizedBox(height: 2.35.h,),
+                //* Type Text
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text("Choisir un type :", style: Styles.textStyle),
+                ),
+                //* Type Dropdown
+                SizedBox(height: 2.35.h,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15,right: 15),
+                  child: DropDownButton(
+                    dropdownValues: type_list,
+                    onSelectedValue: (value){
+                      setState(() {
+                        _selectedItem = value;
+                      });
+                    },
+                    ),
+                ),
+                //* Description text
+                SizedBox(height: 2.35.h,),
+                Padding(padding: EdgeInsets.only(left: 15),child: Text("Ajouter une description : ",style: Styles.textStyle,),),
+                //* Description Text Area
+                SizedBox(height: 2.35.h,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15,right: 15),
+                  child: TextField(
+                    controller: _controllerDescription,
+                    onChanged: (value){
+                      setState(() {
+                        if (value.isEmpty){
+                          _isButtonDisable = true;
+                        }
+                        else _isButtonDisable = false;
+                      });
+                    },
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: "Ajouter une breve description du point noir et l'adresse .. etc ",
+                      border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black,width: 1.5),borderRadius: BorderRadius.all(Radius.circular(15)))
+                    ),
+                    keyboardType: TextInputType.text,
+                
+                  ),
+                ),
+              ],
+          ),
         ),
       ),
     );
