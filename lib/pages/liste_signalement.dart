@@ -18,7 +18,14 @@ class MyClass {
   });
 }
 
-class Liste_Signalement extends StatelessWidget {
+class Liste_Signalement extends StatefulWidget {
+  const Liste_Signalement({Key? key}) : super(key: key);
+
+  @override
+  _Liste_SignalementState createState() => _Liste_SignalementState();
+}
+
+class _Liste_SignalementState extends State<Liste_Signalement> {
   final _controller = TextEditingController();
 
   final List<BlackPoint> blackPoints = Get.find();
@@ -70,11 +77,34 @@ class Liste_Signalement extends StatelessWidget {
       localisation: 'localisation 7',
     ),
   ];
+  List<MyClass> _searchedList = [];
+
+  @override
+  void initState() {
+    _searchedList = itemlist;
+    super.initState();
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<MyClass> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = itemlist;
+    } else {
+      results = itemlist
+          .where((MyClass item) =>
+              item.titre.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _searchedList = results;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    print(blackPoints);
+    print(_searchedList);
 
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +120,7 @@ class Liste_Signalement extends StatelessWidget {
           },
         ),
         title: Text(
-          "Liste des signalements ",
+          "Liste des signalements",
           style: TextStyle(
             fontSize: 21.sp,
             color: Colors.black,
@@ -117,8 +147,8 @@ class Liste_Signalement extends StatelessWidget {
                         width: w * 0.7,
                         child: TextFormField(
                           controller: _controller,
-                          onChanged: (_) => EasyDebounce.debounce('_controller',
-                              const Duration(milliseconds: 2000), () => {}),
+                          onChanged: (value) => _runFilter(value),
+        
                           autofocus: false,
                           textCapitalization: TextCapitalization.none,
                           obscureText: false,
@@ -365,7 +395,7 @@ class Liste_Signalement extends StatelessWidget {
                   child: SizedBox(
                     height: h * 0.75,
                     child: ListView.builder(
-                      itemCount: blackPoints.length,
+                      itemCount: _searchedList.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
                           color: Colors.white,
@@ -397,8 +427,7 @@ class Liste_Signalement extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: ListTile(
-                                      title: Text(
-                                        blackPoints[index].type,
+                                      title : Text(_searchedList[index].titre,
                                         style: TextStyle(fontSize: 20.sp),
                                       ),
                                       subtitle: Column(
@@ -415,8 +444,8 @@ class Liste_Signalement extends StatelessWidget {
                                                 ),
                                                 const Gap(5),
                                                 Expanded(
-                                                  child: Text(
-                                                    blackPoints[index].coordinate.toString(),
+                                                  child: 
+                                                    Text(_searchedList[index].localisation,
                                                     style: TextStyle(
                                                         color: Color.fromARGB(
                                                             255, 35, 98, 68)),
@@ -424,7 +453,7 @@ class Liste_Signalement extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                            Text(blackPoints[index].description),
+                                            Text(_searchedList[index].discription),
                                           ]),
                                     ),
                                   ),
