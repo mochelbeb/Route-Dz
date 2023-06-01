@@ -1,6 +1,6 @@
-# tariki
+# Route DZ
 
-A new Flutter App for Road degradation and reporting of blackspots.
+RouteDz is an application designed to help improve road safety in Algeria by allowing users to report black points and road degradation. With RouteDz, users can easily report dangerous road conditions and help authorities identify areas that require maintenance or improvement. By using RouteDz, you can contribute to making our roads safer for everyone.
 
 ## Getting Started
 

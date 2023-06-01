@@ -5,7 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/packs.dart';
 import 'profile.dart';
 import 'language.dart';
-
+import 'package:RouteDz/pages/termsAndCondition/privacy.dart';
+import 'package:RouteDz/pages/termsAndCondition/condition.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -46,9 +47,9 @@ class SettingsPage extends StatelessWidget {
               _divider(),
               GestureDetector(child: _colorTile(FontAwesomeIcons.language, "Changer de langue"),onTap: (){Get.to(Languagepage());},),
               _divider(),
-              _colorTile(FontAwesomeIcons.file, "Conditions"),
+              GestureDetector(child:_colorTile(FontAwesomeIcons.file, "Conditions"),onTap:(){Get.to(conditionPage());},),
               _divider(),
-              _colorTile(FontAwesomeIcons.lock, "Politique de confidentialité"),
+              GestureDetector(child:_colorTile(FontAwesomeIcons.lock, "Politique de confidentialité"),onTap:(){Get.to(privacyPage());},),
               _divider(),
               GestureDetector(child: _colorTile(FontAwesomeIcons.circleInfo, "À propos"), onTap: (){
                 Get.to(AboutPage());
