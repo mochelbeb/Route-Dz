@@ -1,87 +1,56 @@
+import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../components/Blackpoint.dart';
+import '../services/service.dart';
 import '../widgets/custom_buttons.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:gap/gap.dart';
 
-class MyClass {
-  String titre;
-  String localisation;
-  String discription;
-  MyClass({
-    required this.titre,
-    required this.localisation,
-    required this.discription,
-  });
+
+class Liste_Signalement extends StatefulWidget {
+  const Liste_Signalement({super.key});
+
+  @override
+  State<Liste_Signalement> createState() => _Liste_SignalementState();
 }
 
-class Liste_Signalement extends StatelessWidget {
+class _Liste_SignalementState extends State<Liste_Signalement> {
+
+
   final _controller = TextEditingController();
+  final _pictureController = PageController(viewportFraction: 0.8);
 
-  final List<BlackPoint> blackPoints = Get.find();
-  List<AssetImage> images = [
-    AssetImage("lib/assets/pn1.png"),
-    AssetImage("lib/assets/pn2.png"),
-    AssetImage("lib/assets/pn3.png"),
-    AssetImage("lib/assets/pn1.png"),
-    AssetImage("lib/assets/pn2.png"),
-    AssetImage("lib/assets/pn3.png"),
-    AssetImage("lib/assets/pn1.png"),
-    AssetImage("lib/assets/pn2.png"),
-  ];
+  late List<BlackPoint> blackPoints;
+  final List<String> adress_pn = Get.find();
 
-  final List<MyClass> itemlist = [
-    MyClass(
-      titre: 'TYPE 1',
-      discription: 'discription 1',
-      localisation: 'localisation 1',
-    ),
-    MyClass(
-      titre: 'TYPE 2',
-      discription: 'discription 2',
-      localisation: 'localisation 2',
-    ),
-    MyClass(
-      titre: 'TYPE 3',
-      discription: 'discription 3',
-      localisation: 'localisation 3',
-    ),
-    MyClass(
-      titre: 'TYPE 4',
-      localisation: 'localisation 4',
-      discription: 'discription 4',
-    ),
-    MyClass(
-      titre: 'TYPE 5',
-      localisation: 'localisation 5',
-      discription: 'discription 5',
-    ),
-    MyClass(
-      titre: 'TYPE 6',
-      localisation: 'localisation 6',
-      discription: 'discription 6',
-    ),
-    MyClass(
-      titre: 'TYPE 7',
-      discription: 'discription 7',
-      localisation: 'localisation 7',
-    ),
-  ];
+  @override
+  void initState(){
+    blackPoints = Get.find();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    print(blackPoints);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 5,
         leading: IconButton(
-          icon: FaIcon(
+          icon: const FaIcon(
             FontAwesomeIcons.angleLeft,
             color: Colors.black,
           ),
@@ -124,7 +93,7 @@ class Liste_Signalement extends StatelessWidget {
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Search..',
-                            hintStyle: TextStyle(fontFamily: "Roboto"),
+                            hintStyle: const TextStyle(fontFamily: "Roboto"),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: const BorderSide(
                                 color: Color(0x00FFFFFF),
@@ -187,7 +156,7 @@ class Liste_Signalement extends StatelessWidget {
                         borderWidth: 1,
                         buttonSize: 48,
                         fillColor: Color(0xFF5E81F4),
-                        icon: FaIcon(
+                        icon: const FaIcon(
                           FontAwesomeIcons.sliders,
                           color: Colors.white,
                           size: 20,
@@ -198,16 +167,23 @@ class Liste_Signalement extends StatelessWidget {
                   ),
                 ),
               ),
-              GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
+              SizedBox(
+                    height: h * 0.75,
+                    child: ListView.builder(
+                      itemCount: blackPoints.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         backgroundColor: Color.fromARGB(255, 255, 255, 255),
                         context: context,
                         isScrollControlled: true,
-                        builder: (context) => SizedBox(
+                        builder: (context) {
+                          RxBool checkApprouved = CheckUserApprouved(FirebaseAuth.instance.currentUser, blackPoints[index]).obs;
+                          return SizedBox(
                             height: 700,
                             child: Padding(
                                 padding: EdgeInsets.all(16.0),
@@ -229,35 +205,38 @@ class Liste_Signalement extends StatelessWidget {
                                           ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              'lib/assets/image1.png',
-                                              fit: BoxFit.fill,
-                                            ),
+                                            child: blackPoints[index].pictures == null
+                                              ? Image.asset(
+                                                'lib/assets/warning.png',
+                                                fit: BoxFit.fill,
+                                              )
+                                              : PageView.builder(
+                                                controller: _pictureController,
+                                                itemCount: blackPoints[index].pictures!.length,
+                                                itemBuilder: (context , i){
+                                                  return AnimatedBuilder(
+                                                    animation: _pictureController, 
+                                                    builder: ((context, child) {
+                                                      return SizedBox(
+                                                        child: child,
+                                                      );
+                                                  
+                                                    }),
+                                                    child:Image.network(
+                                                      blackPoints[index].pictures![i],
+                                                      fit: BoxFit.contain,
+                                                    ));
+                                                }
+                                              )
                                           ),
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              'lib/assets/image1.png',
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Image.asset(
-                                              'lib/assets/image1.png',
-                                              fit: BoxFit.fill,
-                                            ),
-                                          )
                                         ],
                                       ),
                                     ),
                                     const Gap(20),
                                     Center(
                                       child: Text(
-                                        "type du signalement",
-                                        style: TextStyle(
+                                        blackPoints[index].type,
+                                        style: const TextStyle(
                                           fontSize: 23,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -268,7 +247,7 @@ class Liste_Signalement extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Localisation",
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
@@ -279,10 +258,9 @@ class Liste_Signalement extends StatelessWidget {
                                           minLines: 1,
                                           maxLines: 2,
                                           controller: TextEditingController(
-                                              text:
-                                                  "la localisation exacte du point noir"),
+                                              text: adress_pn[index]),
                                           enabled: false,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                             fillColor: Colors.white,
                                             border: OutlineInputBorder(),
                                           ),
@@ -292,8 +270,8 @@ class Liste_Signalement extends StatelessWidget {
                                           obscureText: false,
                                         ),
                                         const Gap(20),
-                                        Text(
-                                          "Discription",
+                                        const Text(
+                                          "Description",
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                             fontSize: 23,
@@ -306,9 +284,9 @@ class Liste_Signalement extends StatelessWidget {
                                             maxLines: 7,
                                             controller: TextEditingController(
                                                 text:
-                                                    "la discription du point noir "),
+                                                    blackPoints[index].description),
                                             enabled: false,
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                               fillColor: Colors.white,
                                               border: OutlineInputBorder(),
                                             ),
@@ -320,126 +298,158 @@ class Liste_Signalement extends StatelessWidget {
                                           ),
                                         ),
                                         const Gap(30),
-                                        Row(children: [
-                                          const Gap(25),
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              FontAwesomeIcons.check,
-                                              color: Color.fromARGB(
-                                                  255, 35, 98, 68),
-                                              size: 25,
+                                        Obx(()=>Row(
+                                          children: [
+                                          const Gap(35),
+                                          checkApprouved.value
+                                          
+                                          ? const IconButton(
+                                              onPressed: null,
+                                              icon: Icon(
+                                                FontAwesomeIcons.solidCircleCheck,
+                                                color: Color.fromARGB(
+                                                    255, 35, 98, 68),
+                                                size: 25,
+                                              ),
+                                            )
+                                          : IconButton(
+                                              onPressed: () {
+                                                FirestoreService.ApprouverBlackPoint(FirebaseAuth.instance.currentUser , blackPoints[index]);
+                                                checkApprouved.value = true;
+                                              },
+                                              icon: const Icon(
+                                                FontAwesomeIcons.circleCheck,
+                                                color: Color.fromARGB(
+                                                    255, 35, 98, 68),
+                                                size: 25,
+                                              ),
                                             ),
-                                          ),
-                                          const Gap(230),
+                                          const Gap(180),
                                           IconButton(
                                             onPressed: () {},
-                                            icon: Icon(
+                                            icon: const Icon(
                                               FontAwesomeIcons.comment,
                                               color: Color.fromARGB(
                                                   255, 35, 98, 68),
                                               size: 25,
                                             ),
                                           ),
-                                        ]),
+                                        ])),
                                         const Gap(15),
-                                        Row(
+                                        Obx(()=>Row(
                                           children: [
                                             const Gap(25),
-                                            Text(
-                                              "Valider",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            const Gap(215),
-                                            Text(
+                                            checkApprouved.value
+                                            ? const Text(
+                                                "Approuvé",
+                                                style: TextStyle(fontSize: 16),
+                                              )
+                                            : const Text(
+                                                "Approuver",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            const Gap(150),
+                                            const Text(
                                               "Commenter",
                                               style: TextStyle(fontSize: 16),
                                             ),
                                           ],
-                                        )
+                                        ))
                                       ],
                                     ),
                                   ],
-                                ))));
-                  },
-                  child: SizedBox(
-                    height: h * 0.75,
-                    child: ListView.builder(
-                      itemCount: blackPoints.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          color: Colors.white,
-                          elevation: 10.0,
-                          clipBehavior: Clip.hardEdge,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                                )));});
+                          },
+                          child: Card(
+                            color: Colors.white,
+                            elevation: 10.0,
+                            clipBehavior: Clip.hardEdge,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15),
+                              ),
                             ),
-                          ),
-                          margin: EdgeInsets.all(10),
-                          child: Container(
-                            height: 125,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    height: 100,
-                                    margin:
-                                        EdgeInsets.only(top: 12.5, left: 12.2),
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: images[index],
-                                            fit: BoxFit.fill))),
-                                SizedBox(width: 12),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: ListTile(
-                                      title: Text(
-                                        blackPoints[index].type,
-                                        style: TextStyle(fontSize: 20.sp),
-                                      ),
-                                      subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  FontAwesomeIcons.locationDot,
-                                                  color: Color.fromARGB(
-                                                      255, 35, 98, 68),
-                                                  size: 15,
-                                                ),
-                                                const Gap(5),
-                                                Expanded(
-                                                  child: Text(
-                                                    blackPoints[index].coordinate.toString(),
-                                                    style: TextStyle(
-                                                        color: Color.fromARGB(
-                                                            255, 35, 98, 68)),
+                            margin: EdgeInsets.all(10),
+                            child: Container(
+                              height: 125,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      height: 100,
+                                      margin:
+                                          EdgeInsets.only(top: 12.5, left: 12.2),
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              image: blackPoints[index].pictures == null
+                                                ? AssetImage("lib/assets/warning.png")
+                                                : CachedNetworkImageProvider(blackPoints[index].pictures![0]) as ImageProvider,
+                                              fit: BoxFit.contain))),
+                                  SizedBox(width: 12),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: ListTile(
+                                        title: Text(
+                                          blackPoints[index].type,
+                                          style: TextStyle(fontSize: 20.sp),
+                                        ),
+                                        subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    FontAwesomeIcons.locationDot,
+                                                    color: Color.fromARGB(
+                                                        255, 35, 98, 68),
+                                                    size: 15,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            Text(blackPoints[index].description),
-                                          ]),
+                                                  const Gap(5),
+                                                  Expanded(
+                                                    child: Text(
+                                                      adress_pn[index],
+                                                      style: const TextStyle(
+                                                          color: Color.fromARGB(
+                                                              255, 35, 98, 68)),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(blackPoints[index].description),
+                                            ]),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
                       },
                     ),
-                  )),
+                  ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+
+bool CheckUserApprouved(User? currentUser , BlackPoint pn) {
+  List<String>? approuved = pn.approuvedBy;
+  
+  if(approuved != null && currentUser != null){
+    for (String item in approuved){
+      if (item == currentUser.uid){
+        return true;
+      }
+    }
+  }
+  return false;
 }

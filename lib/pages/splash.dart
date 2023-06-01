@@ -16,9 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((user) { 
-      _user = user;
-    });
+    _user = FirebaseAuth.instance.currentUser;
   }
 
 

@@ -1,7 +1,8 @@
 import 'package:RouteDz/views/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'utils/packs.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -13,6 +14,14 @@ Future<void> main(List<String> args) async {
   await Firebase.initializeApp();
   bool alreadySeen = prefs.getBool('alreadySeen') ?? false;
   
+  var logger = Logger(
+    filter: null,
+    printer: PrettyPrinter(
+      printEmojis: true,
+    ),
+    output: null,
+  );
+
   runApp(ResponsiveSizer(
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      

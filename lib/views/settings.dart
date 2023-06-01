@@ -1,5 +1,6 @@
 import 'package:RouteDz/Client/Auth/Auth.dart';
 import 'package:RouteDz/pages/Apropos.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils/packs.dart';
 import 'profile.dart';
@@ -25,7 +26,23 @@ class SettingsPage extends StatelessWidget {
           const Gap(30),
           Column(
             children: [
-              GestureDetector(child: _colorTile(FontAwesomeIcons.user, "Compte"),onTap: (){Get.to(MyProfilePage());},),
+              GestureDetector(
+                child: _colorTile(FontAwesomeIcons.user, "Compte"),
+                onTap: 
+                FirebaseAuth.instance.currentUser == null
+                  ?  (){
+                    Get.defaultDialog(
+                      title: "Utilisateur non connecté",
+                      content: Text('vous devez vous connecter pour accéder a votre profile'),
+                      actions: [
+                        TextButton(onPressed: (){Get.back();}, child: Text("Cancel")),
+                        TextButton(onPressed: (){Get.to(LoginPage());}, child: Text("Login"))
+                      ]
+                    );
+                  }
+                  : (){Get.to(MyProfilePage());}
+                
+              ),
               _divider(),
               GestureDetector(child: _colorTile(FontAwesomeIcons.language, "Changer de langue"),onTap: (){Get.to(Languagepage());},),
               _divider(),
@@ -37,7 +54,21 @@ class SettingsPage extends StatelessWidget {
                 Get.to(AboutPage());
               },),
               _divider(),
-              GestureDetector(child: _colorTile(FontAwesomeIcons.rightFromBracket, "Se déconnecter"), onTap: SignOut,),
+              GestureDetector(
+                child: _colorTile(FontAwesomeIcons.rightFromBracket, "Se déconnecter"),
+                onTap: FirebaseAuth.instance.currentUser == null
+                  ?  (){
+                    Get.defaultDialog(
+                      title: "Utilisateur non connecté",
+                      content: Text('vous devez vous connecter pour déconnecter de votre compte'),
+                      actions: [
+                        TextButton(onPressed: (){Get.back();}, child: Text("Cancel")),
+                        TextButton(onPressed: (){Get.to(LoginPage());}, child: Text("Login"))
+                      ]
+                    );
+                  }
+                  : SignOut
+               ),
             ],
           ),
         ],

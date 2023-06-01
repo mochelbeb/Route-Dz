@@ -7,10 +7,12 @@ class BlackPoint {
   final LatLng coordinate;
   final DateTime date;
   final String type;
-  final List<String> pictures;
+  final List<String>? pictures;
   final String description;
-  final List<String> comments;
+  final List<String>? comments;
   final String etat;
+  final String? adresse;
+  final List<String>? approuvedBy;
 
   BlackPoint({
     this.id,
@@ -21,6 +23,8 @@ class BlackPoint {
     required this.description,
     required this.comments,
     required this.etat,
+    this.adresse,
+    this.approuvedBy,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,6 +36,7 @@ class BlackPoint {
       'desciption': description,
       'comments': comments,
       'state': etat,
+      'approuvedBy' : approuvedBy,
     };
   }
   factory BlackPoint.fromFirestore(DocumentSnapshot doc) {
@@ -39,13 +44,14 @@ class BlackPoint {
 
     return BlackPoint(
       id: doc.id,
-      coordinate: data['coordinate'],
+      coordinate: LatLng(data['coordinate'].latitude,data['coordinate'].longitude),
       date: (data['date'] as Timestamp).toDate(),
       type: data['type'],
-      pictures: List<String>.from(data['pictures']),
-      comments: data['comments'],
+      pictures: data['pictures'] !=null ? List<String>.from(data['pictures']) : null,
+      comments: data['comments'] != null ? List<String>.from(data['comments']) : null,
       etat: data['etat'], 
       description: data['description'],
+      approuvedBy: data['ApprouvedBy'] != null ? List<String>.from(data['ApprouvedBy']) : null,
     );
   }
 

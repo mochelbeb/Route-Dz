@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
 import 'package:RouteDz/components/Blackpoint.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../services/service.dart';
 import '../utils/packs.dart';
 
 
@@ -14,16 +19,27 @@ class Info_supp extends StatefulWidget {
 }
 
 class _Info_suppState extends State<Info_supp> {
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+
   final _controllerDescription = TextEditingController();
+  final PageController _pageController = PageController(viewportFraction: 0.8);
   List<String> type_list  = ["Nid-de-poule","Erosion","Déformation","Manque d'éclairage","Manque de Signalisation"];
   late bool _isButtonDisable;
   String _selectedItem = "";
+  List<File>? resultList;
+
+  RxBool _PictureSelected = true.obs;
+
+  List<BlackPoint> pointNoirs = Get.find();
 
   Position location = Get.find();
 
 
   @override
   void dispose() {
+    _pageController.dispose();
     _controllerDescription.dispose();
     super.dispose();
   }
@@ -34,11 +50,21 @@ class _Info_suppState extends State<Info_supp> {
     super.initState();
   }
 
+  Future<void> _pick_BP_images() async {
+    resultList = await Service.pickMultiImage();
+    if (resultList != null){
+      _PictureSelected.value = true;
+      _PictureSelected.value = false;
+    } else{
+      _PictureSelected.value = false;
+      _PictureSelected.value = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(location.toString());
     return Scaffold(
       bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -86,16 +112,18 @@ class _Info_suppState extends State<Info_supp> {
                     )
                   ),
                   onPressed: _isButtonDisable ? null : () async {
-                    BlackPoint new_bp = BlackPoint(coordinate: LatLng(location.latitude, location.longitude), date: DateTime.now(), type: _selectedItem, pictures: ["pictures"], description: _controllerDescription.text, comments: ["comments"], etat: "En Attente");
-                    await FirestoreService.addBN(new_bp);
+                    BlackPoint new_bp = BlackPoint(coordinate: LatLng(location.latitude, location.longitude), date: DateTime.now(), type: _selectedItem, pictures: null, description: _controllerDescription.text, comments: null ,etat: "En Attente" , approuvedBy: [currentUser!.uid]);
+                    
+                    await FirestoreService.addBN(context , new_bp , resultList);
+                    
                     Get.defaultDialog(
                       title: "Point noir ajouté avec Succée",
-                      content: null,
+                      content: Text("Point noir a été ajouté avec succés \nMerci de nous avoir aidés à rendre la route meilleure."),
                       actions: [
-                        TextButton(onPressed: (){
-                          Get.back();
-                          Get.back();
-                          Get.back();
+                        TextButton(
+                          onPressed: (){
+                            Get.offAll(()=> MyHomePage());
+                          
                         }, child: Text("OK"))
                       ]
                     );
@@ -147,13 +175,9 @@ class _Info_suppState extends State<Info_supp> {
                 //* Image 
                 GestureDetector(
                   onTap: (){
-                    Get.defaultDialog(
-                      title: "Ajouter des Photos",
-                      content: Text("Ajouter des photos de votre point noir ici"),
-                      confirm: TextButton(onPressed: (){Get.back();},
-                      child: Text("Confirmer")));
+                    _pick_BP_images();
                   },
-                  child: Container(
+                  child: Obx(()=>Container(
                     height: 0.332 * height,
                     width: width,
                     margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -161,7 +185,8 @@ class _Info_suppState extends State<Info_supp> {
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       color: Colors.black12
                     ),
-                    child: Center(
+                    child: _PictureSelected.value
+                    ? Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -169,10 +194,36 @@ class _Info_suppState extends State<Info_supp> {
                         FaIcon(FontAwesomeIcons.camera,),
                         Text("Ajouter des photos",style: TextStyle(fontFamily: "Roboto"),)
                             ]),
-                    ),
-                    
+                    )
+                    : PageView.builder(
+                        controller: _pageController,
+                        itemCount: resultList!.length,
+                        itemBuilder: (context, index) {
+                          return AnimatedBuilder(
+                            animation: _pageController,
+                            builder: (context, child) {
+                              double value = 1;
+                              if (_pageController.position.haveDimensions) {
+                                value = _pageController.page! - index;
+                                value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
+                              }
+                              return Center(
+                                child: SizedBox(
+                                  height: Curves.easeInOut.transform(value) * 200,
+                                  width: Curves.easeInOut.transform(value) * 300,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: Image.file(
+                              resultList![index],
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
                   ),
-                ),
+                )),
                 SizedBox(height: 2.35.h,),
                 //* Type Text
                 Padding(

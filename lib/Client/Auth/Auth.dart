@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:RouteDz/utils/packs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 FirebaseAuth _auth = FirebaseAuth.instance;
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
 Future<UserCredential?> loginWithEmail(String email, String password) async {
   try {
     UserCredential user = await _auth.signInWithEmailAndPassword(email: email, password: password);
     if(user != null){
-      Get.to(MyHomePage());
+      Get.offAll(MyHomePage());
     }
     return user;
   } on FirebaseAuthException catch (e) {
@@ -30,9 +35,26 @@ Future<UserCredential?> SignupWithInfos(String username, String email, String pa
   try{
     UserCredential _newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     if(_newUser != null){
-      Get.defaultDialog(
-        content: Text("Sign-Up success !"),
-      );
+        await _newUser.user!.updateDisplayName(username);
+        final collectionRef = _firestore.collection("Users");
+        final documentRef = collectionRef.doc();
+
+          var bytes = utf8.encode(password);
+          var passwordHash = sha1.convert(bytes);
+
+        await documentRef.set({
+          'email' : email,
+          'username' : username,
+          'password' : passwordHash.toString()
+        });
+
+        Get.defaultDialog(
+          content: Text("Sign-Up success !"),
+          actions: [
+            TextButton(onPressed: (){Get.back();Get.back();}, child: Text("OK")),
+          ]
+        );
+
     }
     return _newUser;
   } on FirebaseAuthException catch(e){
@@ -45,7 +67,7 @@ void SignOut()async{
     await _auth.signOut();
     print('current user is : ${_auth.currentUser}');
     if(_auth.currentUser == null){
-      Get.to(LoginPage());
+      Get.offAll(LoginPage());
     }
   } catch(e){
     print(e);

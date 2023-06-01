@@ -4,10 +4,10 @@ import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
 import 'package:RouteDz/components/Blackpoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../services/service.dart';
 import '../utils/packs.dart';
-
-
 
 
 class HomePage extends StatefulWidget {
@@ -18,12 +18,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var type_list = ["type1","type2","type3","type4","type5"]; // la liste des types 
+  var logger = Logger();
 
+  var type_list = ["Nid-de-Poule","Erosion","transformation","Manque d'eclairage","Manque de Signalization"]; // la liste des types 
+
+
+  RxBool SymbolsAdded = false.obs;
 
   late TextEditingController _controller;
   MapboxMapController? mapController;
-
 
   // Sort By buttons boolean for switch
   RxBool proximite_btn = true.obs;
@@ -40,19 +43,22 @@ class _HomePageState extends State<HomePage> {
   RxBool week_btn = true.obs;
 
   List<Symbol> symbol_list = [];
+  List<BlackPoint> BlackPoints = [];
+  List<String> adress = [];
+  
+  PageController _pictureController = PageController(viewportFraction: 0.8);
 
   void _onMapCreated(MapboxMapController controller)async{
     mapController = controller;
-    final ByteData bytes = await rootBundle.load("lib/assets/warning.png");
-    final Uint8List list = bytes.buffer.asUint8List();
-    mapController!.addImage("warning-15",list);
-    AddBlackPoints();
   }
 
   AddBlackPoints()async{
-    List<BlackPoint> BlackPoints = await FirestoreService.getBlackPoints();
-    final List<BlackPoint> _data = Get.put(BlackPoints);
+    final ByteData bytes = await rootBundle.load("lib/assets/warning.png");
+    final Uint8List list = bytes.buffer.asUint8List();
+    mapController!.addImage("warning-15",list);
+    BlackPoints = await FirestoreService.getBlackPoints();
     BlackPoints.forEach((pn) {
+      logger.i("pn id : ${pn.id}");
       Symbol new_sym = Symbol(
         pn.id as String,
         SymbolOptions(
@@ -60,11 +66,21 @@ class _HomePageState extends State<HomePage> {
         iconImage: "warning-15",
         iconSize: 0.15,
       ));
+      logger.e("new symbol id : ${new_sym.id}");
       symbol_list.add(new_sym);
-      mapController!.addSymbol(new_sym.options);
+      mapController!.addSymbol(new_sym.options, {'id' : new_sym.id});
+    });
+    BlackPoints.forEach((pn) async {
+      String ad = await Service.getStateAndProvinceFromLatLng(pn.coordinate.latitude, pn.coordinate.longitude);
+      adress.add(ad);
     });   
-    print("test 3 success");
+    final List<String> _adress_data = Get.put(adress);
+    final List<BlackPoint> _data = Get.put(BlackPoints);
+    mapController!.onSymbolTapped.add((element){
+      _onSymbolTapped(element);
+    });  
   }
+
   _zoomChanges(){
     if(mapController != null){
       double zoom = mapController!.cameraPosition!.zoom;
@@ -82,13 +98,186 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
     _controller = TextEditingController();
+    Future.delayed(const Duration(seconds: 2), (){
+      AddBlackPoints();
+    });
+  }
+
+  void _onSymbolTapped(Symbol s){
+    BlackPoint? blackPoint_tapped = FirestoreService.findBlackPointFromSymbol(s, BlackPoints);
+    if(blackPoint_tapped != null){
+      String adresse_Tapped = adress[BlackPoints.indexOf(blackPoint_tapped)];
+
+      showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SizedBox(
+          height: 700,
+          child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+          children: [
+            const Gap(10),
+            Container(
+              width: 400.0,
+              height: 200.0,
+              decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  border: Border.all(
+                    width: 2.0,
+                  ),
+                  borderRadius:
+                      BorderRadius.circular(20)),
+              child: PageView(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(20),
+                    child: blackPoint_tapped.pictures == null
+                  ? Image.asset(
+                    'lib/assets/warning.png',
+                    fit: BoxFit.fill,
+                  )
+                  : PageView.builder(
+                    controller: _pictureController,
+                    itemCount: blackPoint_tapped.pictures!.length,
+                    itemBuilder: (context , i){
+                      return AnimatedBuilder(
+                        animation: _pictureController, 
+                        builder: ((context, child) {
+                          return SizedBox(
+                            child: child,
+                          );
+                      
+                        }),
+                        child:Image.network(
+                          blackPoint_tapped.pictures![i],
+                          fit: BoxFit.contain,
+                        ));
+                    }
+                  )
+              ),
+            ],
+          ),
+        ),
+        const Gap(20),
+        Center(
+          child: Text(
+            blackPoint_tapped.type,
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+        const Gap(20),
+        Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Localisation",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 23,
+              ),
+            ),
+            TextField(
+              minLines: 1,
+              maxLines: 2,
+              controller: TextEditingController(
+                  text: adresse_Tapped),
+              enabled: false,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                border: OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+              autofocus: true,
+              obscureText: false,
+            ),
+            const Gap(20),
+            Text(
+              "Discription",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 23,
+              ),
+            ),
+            SizedBox(
+              child: TextField(
+                readOnly: true,
+                minLines: 3,
+                maxLines: 7,
+                controller: TextEditingController(
+                    text:
+                        blackPoint_tapped.description),
+                enabled: false,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(),
+                ),
+                textInputAction:
+                    TextInputAction.next,
+                keyboardType: TextInputType.text,
+                autofocus: true,
+                obscureText: false,
+              ),
+            ),
+            const Gap(30),
+            Row(children: [
+              const Gap(35),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  FontAwesomeIcons.circleCheck,
+                  color: Color.fromARGB(
+                      255, 35, 98, 68),
+                  size: 25,
+                ),
+              ),
+              const Gap(180),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  FontAwesomeIcons.comment,
+                  color: Color.fromARGB(
+                      255, 35, 98, 68),
+                  size: 25,
+                ),
+              ),
+            ]),
+            const Gap(15),
+            Row(
+              children: [
+                const Gap(25),
+                Text(
+                  "Approuver",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const Gap(150),
+                Text(
+                  "Commenter",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ))));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-    print(FirebaseAuth.instance.currentUser);
     return SafeArea(
       child: Stack(
         children: [
@@ -105,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                   target: LatLng(36.38214832844181, 3.8946823228767466),
                   zoom: 14.0, 
                 ),
-              ),
+              )
               // decoration: const BoxDecoration(
               //   color: Color.fromARGB(255, 194, 217, 218),
               // ),
@@ -280,7 +469,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -301,7 +490,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -338,7 +527,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -363,7 +552,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -388,7 +577,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(MediaQuery.of(context).size.width/3 - 30,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -424,7 +613,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: const Color(0xff5e81f4),
-                                        backgroundColor: const Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -447,7 +636,7 @@ class _HomePageState extends State<HomePage> {
                                         disabledForegroundColor: Colors.white,
                                         foregroundColor: Colors.black,
                                         disabledBackgroundColor: Color(0xff5e81f4),
-                                        backgroundColor: Color.fromRGBO(204, 204, 204, 1),
+                                        backgroundColor: Color.fromARGB(255, 240, 240, 240),
                                         fixedSize: Size(0.38*w,50),
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
@@ -491,8 +680,8 @@ class _HomePageState extends State<HomePage> {
                                       onPressed: (){}, 
                                       style: OutlinedButton.styleFrom(
                                         fixedSize: Size(0.38*w,50),
-                                        foregroundColor: const Color.fromRGBO(36, 160, 237, 1),
-                                        backgroundColor: const Color.fromARGB(255, 240, 240, 240),
+                                        backgroundColor: const Color(0xff5e81f4),
+                                        foregroundColor: const Color.fromARGB(255, 240, 240, 240),
                                       ),
                                       child: const Text("Appliquer"),                                    
                                     ),

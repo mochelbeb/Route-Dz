@@ -18,9 +18,15 @@ class _SignalerFormState extends State<SignalerForm> {
   final TextEditingController _controllerSearch = TextEditingController();
   MapboxMapController? map_controller;
   
+
   Position? location;
   
+  late List<String> wilayas;
+  List<String> filteredItems = [];
+
   RxBool _islocated = false.obs;
+  
+  bool _isFocused = false;
 
 
 
@@ -50,14 +56,24 @@ class _SignalerFormState extends State<SignalerForm> {
     _islocated.value = true;
   }
 
+
+  Future<void> _loadStates()async{
+    final states = await Service.getStateCode();
+    setState(() {
+      this.wilayas = states;
+    });
+    print(wilayas);
+  }
+
   @override
   void dispose() {
     _controllerSearch.dispose();
     super.dispose();
   }
   @override
-  void initState() {
+  void initState(){
     super.initState();
+    _loadStates();
   }
 
 
@@ -98,98 +114,158 @@ class _SignalerFormState extends State<SignalerForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       //* searchbar
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        width: width * 0.764,
-                        child: TextFormField(
-                          controller: _controllerSearch,
-                          onChanged: (_) => EasyDebounce.debounce('_controllerSearch',
-                              const Duration(milliseconds: 2000), () => {}),
-                          autofocus: false,
-                          textCapitalization: TextCapitalization.none,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            hintText: 'Rechercher',
-                            hintStyle: TextStyle(fontFamily: "Roboto" ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0x00FFFFFF),
-                                width: 1,
+                      Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 10),
+                            width: width * 0.764,
+                            child: TextFormField(
+                              onTap: (){
+                                setState(() {
+                                  _isFocused = true;
+                                  filterList("");
+                                });
+                              },
+                              onEditingComplete: (){
+                                setState(() {
+                                  _isFocused = false;
+                                });
+                              },
+                              controller: _controllerSearch,
+                              onChanged: (text) => EasyDebounce.debounce('_controllerSearch',
+                                  const Duration(milliseconds: 2000), () => {
+                                      if (text.isEmpty) {
+                                        setState(() {
+                                          filteredItems.clear();
+                                          filterList("");
+                                        })
+                                      } else {
+                                        filterList(text)
+                                      }
+                                  }),
+                              autofocus: false,
+                              textCapitalization: TextCapitalization.none,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                hintText: 'Rechercher',
+                                hintStyle: TextStyle(fontFamily: "Roboto" ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0x00FFFFFF),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: const Icon(
+                                  FontAwesomeIcons.magnifyingGlass,
+                                  size: 15,
+                                ),
+                                suffixIcon: _controllerSearch.text.isNotEmpty
+                                    ? InkWell(
+                                        onTap: () async {
+                                          _controllerSearch.clear();
+                                        },
+                                        child: const Icon(
+                                          Icons.clear,
+                                          color: Color(0xFF757575),
+                                          size: 22,
+                                        ),
+                                      )
+                                    : null,
                               ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0x00000000),
-                                width: 1,
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Color(0xFF454545),
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
                               ),
-                              borderRadius: BorderRadius.circular(50),
+                              textAlign: TextAlign.justify,
                             ),
-                            errorBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0x00000000),
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            focusedErrorBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0x00000000),
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            prefixIcon: const Icon(
-                              FontAwesomeIcons.magnifyingGlass,
-                              size: 15,
-                            ),
-                            suffixIcon: _controllerSearch.text.isNotEmpty
-                                ? InkWell(
-                                    onTap: () async {
-                                      _controllerSearch.clear();
-                                    },
-                                    child: const Icon(
-                                      Icons.clear,
-                                      color: Color(0xFF757575),
-                                      size: 22,
-                                    ),
-                                  )
-                                : null,
                           ),
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFF454545),
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          textAlign: TextAlign.justify,
-                        ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+           Positioned(
+              top: 70,
+              left: 0,
+              right: 0,
+              child: Visibility(
+                visible: _isFocused ? true : false,
+                child: Container(
+                  width: width,
+                  margin: EdgeInsets.fromLTRB(50, 0, 60, 0),
+                  height: 150,
+                  color: Colors.white,
+                  child: ListView.builder(
+                      itemCount: filteredItems.length,
+                      itemBuilder: (c, i) {
+                        return ListTile(
+                          title: Text(filteredItems[i]),
+                         
+                          onTap: (){
+                            _controllerSearch.text = filteredItems[i];
+                            setState(() {
+                              _isFocused = false;
+                            });
+                          },
+                        );
+                      }),
+                ),
+              )),
           // ! se Localiser
           Align(
-                  alignment: AlignmentDirectional(0,0.8),
-                  child: MyCustomButton_widget2(
-                    text: "se Localiser",
-                    onPressed: ()async{
-                      location = await Service.GetCurrentPosition();
-                      if(location != null){
-                        final Position _positionData = Get.put(location!); 
-                        _updateLocation();
-                      }
-                    },
-                    options: Button_Option(
-                      elevation: 15,
-                      textStyle: TextStyle(fontFamily: "Poppins",fontSize: 18.sp,color: Colors.white,fontWeight: FontWeight.w500),
-                      height: 45,
-                      width: 0.359 * width,
-                      color: Color.fromRGBO(94, 129, 244, 1),
-                    ),
-                  ))  
+            alignment: AlignmentDirectional(0,0.8),
+            child: MyCustomButton_widget2(
+              text: "se Localiser",
+              onPressed: ()async{
+              bool checkGPS = await gpsCheck(context);
+                if (checkGPS){
+                  location = await Service.GetCurrentPosition(context);
+                  if(location != null){
+                    final Position _positionData = Get.put(location!); 
+                    _updateLocation();
+                  }
+                }else{
+                  _showActivateGPSDialog(context);
+                  setState(() {
+                    
+                  });
+                }
+                
+              },
+              options: Button_Option(
+                elevation: 15,
+                textStyle: TextStyle(fontFamily: "Poppins",fontSize: 18.sp,color: Colors.white,fontWeight: FontWeight.w500),
+                height: 45,
+                width: 0.359 * width,
+                color: Color.fromRGBO(94, 129, 244, 1),
+              ),
+            ))  
         ],
       ),
       bottomNavigationBar: Container(
@@ -245,5 +321,57 @@ class _SignalerFormState extends State<SignalerForm> {
           ),
         ),
     );    
+  }
+
+
+  void filterList(String query) {
+    List<String> tempList = [];
+    if (query=="") {
+      tempList.addAll(wilayas);
+    } else if (query.isNotEmpty) {
+      for (int i = 0; i < wilayas.length; i++) {
+        if (wilayas[i].toLowerCase().contains(query.toLowerCase())) {
+          tempList.add(wilayas[i]);
+        }
+      }
+    } 
+    setState(() {
+      filteredItems.clear();
+      filteredItems.addAll(tempList);
+    });
   }  
+}
+
+gpsCheck(BuildContext context) async {
+    bool serviceEnabled;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    return serviceEnabled;
+}
+
+
+void _showActivateGPSDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Activate GPS'),
+        content: Text('Please activate GPS to use this feature.'),
+        actions: [
+          TextButton(
+            child: Text('Open Settings'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              Geolocator.openLocationSettings(); // Open device settings
+            },
+          ),
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
