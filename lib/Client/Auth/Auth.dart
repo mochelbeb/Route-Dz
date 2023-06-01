@@ -49,7 +49,8 @@ Future<UserCredential?> SignupWithInfos(String username, String email, String pa
         });
 
         Get.defaultDialog(
-          content: Text("Sign-Up success !"),
+          title: "Inscription Complète",
+          content: Text("Compte ajouté avec succès."),
           actions: [
             TextButton(onPressed: (){Get.back();Get.back();}, child: Text("OK")),
           ]
