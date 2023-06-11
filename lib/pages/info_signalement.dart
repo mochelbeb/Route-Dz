@@ -115,6 +115,9 @@ class _Info_suppState extends State<Info_supp> {
                     BlackPoint new_bp = BlackPoint(coordinate: LatLng(location.latitude, location.longitude), date: DateTime.now(), type: _selectedItem, pictures: null, description: _controllerDescription.text, comments: null ,etat: "En Attente" , approuvedBy: [currentUser!.uid]);
                     
                     await FirestoreService.addBN(context , new_bp , resultList);
+
+                    Get.delete<List<BlackPoint>>();
+                    Get.delete<List<String>>();
                     
                     Get.defaultDialog(
                       title: "Point noir ajouté avec Succée",

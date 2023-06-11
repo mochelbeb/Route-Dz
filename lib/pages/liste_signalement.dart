@@ -1,4 +1,5 @@
 import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
+import 'package:RouteDz/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,12 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
 
   late List<BlackPoint> blackPoints;
   final List<String> adress_pn = Get.find();
+  
+  var commentController;
 
   @override
   void initState(){
+    commentController = TextEditingController();
     blackPoints = Get.find();
     super.initState();
   }
@@ -316,6 +320,7 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                               onPressed: () {
                                                 FirestoreService.ApprouverBlackPoint(FirebaseAuth.instance.currentUser , blackPoints[index]);
                                                 checkApprouved.value = true;
+                                                Get.offAll(()=>MyHomePage());
                                               },
                                               icon: const Icon(
                                                 FontAwesomeIcons.circleCheck,
@@ -326,7 +331,45 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                             ),
                                           const Gap(180),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              // show dialog box that shows the List of comments and text field to add a comment and a button to add the comment
+                                              showDialog(context: context, builder: (context){
+                                                return AlertDialog(
+                                                  title: const Text("Commentaires"),
+                                                  content: Column(
+                                                  children: [
+                                                  SizedBox(
+                                                    width: 400,
+                                                    height: h*0.73,
+                                                    child :ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: blackPoints[index].comments == null || blackPoints[index].comments!.isEmpty ? null : blackPoints[index].comments!.length,
+                                                    itemBuilder: (BuildContext context, int i){
+                                                      return blackPoints[index].comments == null || blackPoints[index].comments!.isEmpty ?
+                                                        null
+                                                        :ListTile(
+                                                          title: Text(blackPoints[index].comments![i]),
+                                                        );
+                                                    }
+                                                  )),
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 200,
+                                                        child: TextField(
+                                                          controller: commentController,
+                                                          decoration: const InputDecoration(
+                                                          hintText: "Ajouter un commentaire",
+                                                          ),
+                                                                                                          ),
+                                                      ),
+                                                      const Gap(10),
+                                                      IconButton(icon: FaIcon(FontAwesomeIcons.chevronRight), onPressed: (){}),
+                                                    ],
+                                                  )
+                                                ],));
+                                              });
+                                            },
                                             icon: const Icon(
                                               FontAwesomeIcons.comment,
                                               color: Color.fromARGB(
@@ -383,7 +426,7 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(15),
                                           image: DecorationImage(
-                                              image: blackPoints[index].pictures == null
+                                              image: blackPoints[index].pictures == null || blackPoints[index].pictures!.isEmpty
                                                 ? AssetImage("lib/assets/warning.png")
                                                 : CachedNetworkImageProvider(blackPoints[index].pictures![0]) as ImageProvider,
                                               fit: BoxFit.contain))),

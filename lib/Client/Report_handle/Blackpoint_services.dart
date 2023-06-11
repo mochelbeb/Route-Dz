@@ -77,6 +77,7 @@ class FirestoreService{
     }).toList();
 
   // Return the list of BlackPoint objects
+  print('BlackPoints : $blackPoints');
   return blackPoints;
   }
   

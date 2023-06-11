@@ -70,10 +70,14 @@ class _HomePageState extends State<HomePage> {
       symbol_list.add(new_sym);
       mapController!.addSymbol(new_sym.options, {'id' : new_sym.id});
     });
+
     BlackPoints.forEach((pn) async {
       String ad = await Service.getStateAndProvinceFromLatLng(pn.coordinate.latitude, pn.coordinate.longitude);
+      logger.e("adress : $ad");
       adress.add(ad);
     });   
+    print("adress : $adress");
+    
     final List<String> _adress_data = Get.put(adress);
     final List<BlackPoint> _data = Get.put(BlackPoints);
     mapController!.onSymbolTapped.add((element){
@@ -107,6 +111,7 @@ class _HomePageState extends State<HomePage> {
     BlackPoint? blackPoint_tapped = FirestoreService.findBlackPointFromSymbol(s, BlackPoints);
     if(blackPoint_tapped != null){
       String adresse_Tapped = adress[BlackPoints.indexOf(blackPoint_tapped)];
+      RxBool checkApprouved = CheckUserApprouved(FirebaseAuth.instance.currentUser, blackPoint_tapped).obs;
 
       showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -203,7 +208,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const Gap(20),
             Text(
-              "Discription",
+              "Description",
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 23,
@@ -230,43 +235,65 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const Gap(30),
-            Row(children: [
+             Obx(()=>Row(
+              children: [
               const Gap(35),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  FontAwesomeIcons.circleCheck,
-                  color: Color.fromARGB(
-                      255, 35, 98, 68),
-                  size: 25,
+              checkApprouved.value
+              
+              ? const IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    FontAwesomeIcons.solidCircleCheck,
+                    color: Color.fromARGB(
+                        255, 35, 98, 68),
+                    size: 25,
+                  ),
+                )
+              : IconButton(
+                  onPressed: () {
+                    FirestoreService.ApprouverBlackPoint(FirebaseAuth.instance.currentUser , blackPoint_tapped);
+                    checkApprouved.value = true;
+                    Get.delete<List<BlackPoint>>();
+                    Get.offAll(()=>MyHomePage());
+                  },
+                  icon: const Icon(
+                    FontAwesomeIcons.circleCheck,
+                    color: Color.fromARGB(
+                        255, 35, 98, 68),
+                    size: 25,
+                  ),
                 ),
-              ),
               const Gap(180),
               IconButton(
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   FontAwesomeIcons.comment,
                   color: Color.fromARGB(
                       255, 35, 98, 68),
                   size: 25,
                 ),
               ),
-            ]),
+            ])),
             const Gap(15),
-            Row(
-              children: [
-                const Gap(25),
-                Text(
+             Obx(()=>Row(
+             children: [
+              const Gap(25),
+              checkApprouved.value
+              ? const Text(
+                  "Approuvé",
+                  style: TextStyle(fontSize: 16),
+                )
+              : const Text(
                   "Approuver",
                   style: TextStyle(fontSize: 16),
                 ),
-                const Gap(150),
-                Text(
-                  "Commenter",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            )
+              const Gap(150),
+              const Text(
+                "Commenter",
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ))
           ],
         ),
       ],

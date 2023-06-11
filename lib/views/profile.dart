@@ -168,24 +168,6 @@ class MyProfilePageState extends State<MyProfilePage> {
                                  TextButton(onPressed: (){}, child: Text("Modifier",style: TextStyle(fontSize: 18.sp),)),
                               ],
                             ),
-
-                            const Gap(15),
-
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: _isChecked,
-                                  onChanged: (checked){
-                                    setState(() {
-                                      _isChecked = checked as bool;
-                                      }
-                                    );
-                                  },
-                                ),
-                                Text("Recevoir des notification"),
-                              ],
-                            ),
-
                             
                           ],
                         ),
