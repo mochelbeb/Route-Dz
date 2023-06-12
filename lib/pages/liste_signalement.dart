@@ -210,10 +210,9 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             child: blackPoints[index].pictures == null
-                                              ? Image.asset(
-                                                'lib/assets/warning.png',
-                                                fit: BoxFit.fill,
-                                              )
+                                              ? blackPoints[index].approuvedBy == null || blackPoints[index].approuvedBy!.isEmpty || blackPoints[index].approuvedBy!.length < 5
+                                                ? Image.asset('lib/assets/warning.png',fit: BoxFit.fill,)
+                                                : Image.asset('lib/assets/alert.png',fit: BoxFit.contain,)
                                               : PageView.builder(
                                                 controller: _pictureController,
                                                 itemCount: blackPoints[index].pictures!.length,
@@ -427,7 +426,10 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                           borderRadius: BorderRadius.circular(15),
                                           image: DecorationImage(
                                               image: blackPoints[index].pictures == null || blackPoints[index].pictures!.isEmpty
-                                                ? AssetImage("lib/assets/warning.png")
+                                                ? 
+                                                blackPoints[index].approuvedBy == null || blackPoints[index].approuvedBy!.isEmpty || blackPoints[index].approuvedBy!.length < 5
+                                                  ? AssetImage("lib/assets/warning.png")
+                                                  : AssetImage("lib/assets/alert.png")
                                                 : CachedNetworkImageProvider(blackPoints[index].pictures![0]) as ImageProvider,
                                               fit: BoxFit.contain))),
                                   SizedBox(width: 12),

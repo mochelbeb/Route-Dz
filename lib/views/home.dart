@@ -53,19 +53,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   AddBlackPoints()async{
-    final ByteData bytes = await rootBundle.load("lib/assets/warning.png");
-    final Uint8List list = bytes.buffer.asUint8List();
+    final ByteData warning = await rootBundle.load("lib/assets/warning.png");
+    final Uint8List list = warning.buffer.asUint8List();
+
+    final ByteData alert = await rootBundle.load("lib/assets/alert.png");
+    final Uint8List list2 = alert.buffer.asUint8List();
+
     mapController!.addImage("warning-15",list);
+    mapController!.addImage("alert-15",list2);
+    
     BlackPoints = await FirestoreService.getBlackPoints();
     BlackPoints.forEach((pn) {
       logger.i("pn id : ${pn.id}");
-      Symbol new_sym = Symbol(
+      Symbol new_sym;
+      if(pn.approuvedBy != null && pn.approuvedBy!.length >= 5){
+        new_sym = Symbol(
+          pn.id as String,
+          SymbolOptions(
+          geometry: LatLng(pn.coordinate.latitude, pn.coordinate.longitude),
+          iconImage: "alert-15",
+          iconSize: pn.approuvedBy!.length >= 10 ? 0.25 : 0.2,
+        ));
+      }
+      else{
+        new_sym = Symbol(
         pn.id as String,
         SymbolOptions(
         geometry: LatLng(pn.coordinate.latitude, pn.coordinate.longitude),
         iconImage: "warning-15",
         iconSize: 0.15,
       ));
+      }
+      
       logger.e("new symbol id : ${new_sym.id}");
       symbol_list.add(new_sym);
       mapController!.addSymbol(new_sym.options, {'id' : new_sym.id});
@@ -73,7 +92,6 @@ class _HomePageState extends State<HomePage> {
 
     BlackPoints.forEach((pn) async {
       String ad = await Service.getStateAndProvinceFromLatLng(pn.coordinate.latitude, pn.coordinate.longitude);
-      logger.e("adress : $ad");
       adress.add(ad);
     });   
     print("adress : $adress");
@@ -143,10 +161,15 @@ class _HomePageState extends State<HomePage> {
                     borderRadius:
                         BorderRadius.circular(20),
                     child: blackPoint_tapped.pictures == null
-                  ? Image.asset(
+                  ? blackPoint_tapped.approuvedBy!.length < 5
+                   ? Image.asset(
                     'lib/assets/warning.png',
                     fit: BoxFit.fill,
                   )
+                   : Image.asset(
+                    'lib/assets/alert.png',
+                    fit: BoxFit.contain,
+                   )
                   : PageView.builder(
                     controller: _pictureController,
                     itemCount: blackPoint_tapped.pictures!.length,

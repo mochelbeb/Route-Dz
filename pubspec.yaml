@@ -101,6 +101,7 @@ flutter:
     - lib/assets/pn2.png
     - lib/assets/pn3.png
     - lib/assets/pn4.png
+    - lib/assets/alert.png
     - lib/assets/alert.svg
     - lib/assets/warning.png
     - lib/assets/location.png
