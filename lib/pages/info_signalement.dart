@@ -25,7 +25,8 @@ class _Info_suppState extends State<Info_supp> {
 
   final _controllerDescription = TextEditingController();
   final PageController _pageController = PageController(viewportFraction: 0.8);
-  List<String> type_list  = ["Nid-de-poule","Erosion","Déformation","Manque d'éclairage","Manque de Signalisation"];
+
+  List<String> type_list  = ["Nid-de-poule","Erosion","Déformation","Manque d'éclairage","Manque de Signalisation"]; // ** types
   late bool _isButtonDisable;
   String _selectedItem = "";
   List<File>? resultList;
@@ -114,7 +115,7 @@ class _Info_suppState extends State<Info_supp> {
                   onPressed: _isButtonDisable ? null : () async {
                     BlackPoint new_bp = BlackPoint(coordinate: LatLng(location.latitude, location.longitude), date: DateTime.now(), type: _selectedItem, pictures: null, description: _controllerDescription.text, comments: null ,etat: "En Attente" , approuvedBy: [currentUser!.uid]);
                     
-                    await FirestoreService.addBN(context , new_bp , resultList);
+                    await FirestoreService.addBN(new_bp , resultList);
 
                     Get.delete<List<BlackPoint>>();
                     Get.delete<List<String>>();

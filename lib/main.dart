@@ -7,6 +7,8 @@ import 'utils/packs.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main(List<String> args) async {
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +28,7 @@ Future<void> main(List<String> args) async {
     builder: (context, orientation, screenT) {
       return GetMaterialApp(      
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         home: SplashScreen(alreadySeen : alreadySeen),
       );
     },

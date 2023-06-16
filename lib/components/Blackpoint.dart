@@ -9,7 +9,7 @@ class BlackPoint {
   final String type;
   final List<String>? pictures;
   final String description;
-  final List<String>? comments;
+  late final List<String>? comments;
   final String etat;
   final String? adresse;
   final List<String>? approuvedBy;

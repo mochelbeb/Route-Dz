@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 
 class Service {
 
@@ -76,6 +77,31 @@ class Service {
       return selectedImage;
     }
     return null;
+  }
+
+
+    static Future<List<File>> pickImageFrom(String input) async {
+      List<File> selectedPictures = [];
+      final picker = ImagePicker();
+      if(input == "camera"){
+        final pickedImage = await picker.pickImage(source: ImageSource.camera);
+        if (pickedImage != null){
+          File selectedImage = File(pickedImage.path);
+          selectedPictures!.add(selectedImage);
+          return selectedPictures;
+        }
+      } else{
+        final pickedImage = await picker.pickMultiImage();
+        if (pickedImage != null){
+          for(XFile f in pickedImage){
+            File selectedImage = File(f.path);
+            selectedPictures.add(selectedImage);
+          }
+          Logger().i(selectedPictures);
+          return selectedPictures;
+        }
+      }
+      return selectedPictures;
   }
 
   static Future<List<File>?> pickMultiImage() async {

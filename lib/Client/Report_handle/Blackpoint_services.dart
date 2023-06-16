@@ -14,7 +14,7 @@ class FirestoreService{
   
   // $$ Ajouter un point Noir
   
-  static Future<void> addBN(BuildContext context,BlackPoint blackPoint , List<File>? pictures) async {
+  static Future<void> addBN(BlackPoint blackPoint , List<File>? pictures) async {
 
     final collectionRef = _firestore.collection("Blackpoints");
     final documentRef = collectionRef.doc();
@@ -32,10 +32,22 @@ class FirestoreService{
 
     // 2. Upload pictures to Cloud Storage
     if (pictures != null){
-      List<String> pictureUrls = await uploadPictures(context,pictures , documentRef.id);
+      List<String> pictureUrls = await uploadPictures(pictures , documentRef.id);
       await documentRef.update({'pictures' : pictureUrls});
     }
   }
+
+  static Future<void> uplaod(List<File> photos, String docId) async {
+    final collectionRef = _firestore.collection("Blackpoints");
+    final documentRef = collectionRef.doc(docId);
+    if (photos.isNotEmpty){
+      Logger().i('Uploading pictures');
+      List<String> pictureUrls = await uploadPictures(photos , docId);
+      await documentRef.update({'pictures' : pictureUrls});
+    }
+  }
+
+
 
   // $$ Get data (black points) from database
 
@@ -81,13 +93,13 @@ class FirestoreService{
   return blackPoints;
   }
   
-  static Future<List<String>> uploadPictures(BuildContext context ,List<File> pictures , String docID) async {
+  static Future<List<String>> uploadPictures(List<File> pictures , String docID) async {
     List<String> pictureUrls = [];
     RxInt CompletedPictures = 0.obs;
     RxDouble progress = 0.0.obs;
     int i = 0;
       showDialog(
-        context: context,
+        context: navigatorKey.currentContext!,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return Dialog(
@@ -170,5 +182,22 @@ class FirestoreService{
       'ApprouvedBy' : approuvedList,
     });
 
+  }
+
+
+  static void addCommentToBlackPoint(BlackPoint blackpoint_current, text) async {
+    String? docID = blackpoint_current.id;
+    final collectionRef = _firestore.collection("Blackpoints");
+    final documentRef = collectionRef.doc(docID);
+
+    final documentSnapshot = await documentRef.get();
+
+    List<String>? comments = List.from(documentSnapshot.data()?['comments'] ?? []);
+
+    comments.add(text);
+
+    documentRef.update({
+      'comments' : comments,
+    });
   }
 }

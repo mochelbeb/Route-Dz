@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:RouteDz/Client/Report_handle/Blackpoint_services.dart';
 import 'package:RouteDz/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -49,6 +51,9 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
 
   var commentController;
 
+  List<File>? resultList;
+  RxBool _PictureSelected = true.obs;
+
   @override
   void initState(){
     commentController = TextEditingController();
@@ -61,6 +66,51 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  Future<void> _pick_BP_images(String docId) async {
+// show bottomSheet to make choice between camera and gallery
+    Logger().i("pick image");
+    Get.bottomSheet(
+      BottomSheet(onClosing: (){}, builder: (context){
+        return Container(
+          height: 130,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(100, 50),
+                ),
+                onPressed: ()async{
+                  List<File?> result = await Service.pickImageFrom("camera");
+                  Logger().i("GET IMAGES FROM CAMERA : $result");
+                  if(result.isNotEmpty){
+                    resultList = result as List<File>;
+                    Logger().i("PHOTO UPLOADED : $resultList");
+                    var unpload = await FirestoreService.uplaod(resultList! , docId);
+                  }
+                  Get.offAll(MyHomePage());
+
+              }, child: Text("Camera")),
+              ElevatedButton(
+                onPressed: ()async{
+                  Get.back();
+                  var result = await Service.pickImageFrom("Gallery");
+                  Logger().i("GET IMAGES FROM GALLERY : $result");
+                  if(result.isNotEmpty){
+                    resultList = result as List<File>;
+                    Logger().i("PHOTO UPLOADED : $resultList");
+                    var unpload = await FirestoreService.uplaod(resultList! , docId);
+                  }
+                  Get.offAll(MyHomePage());
+
+              }, child: Text("Galerie")),
+            ],
+          ),
+        );
+      })
+    );    
   }
 
   void filterSearchResults(String query) {
@@ -632,7 +682,10 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                                   255, 35, 98, 68),
                                               size: 25,
                                             ),
-                                            onPressed:(){}
+                                            onPressed:() async {
+                                              var response = await _pick_BP_images(blackpoint_current[index].id!);
+                                              
+                                            } // ** Illuster avec des images ** // 
                                           ),
                                           const Gap(70),
                                           IconButton(
@@ -669,7 +722,18 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                                                                                           ),
                                                       ),
                                                       const Gap(10),
-                                                      IconButton(icon: FaIcon(FontAwesomeIcons.chevronRight), onPressed: (){}),
+                                                      IconButton(icon: FaIcon(FontAwesomeIcons.chevronRight), onPressed: (){
+                                                        FirestoreService.addCommentToBlackPoint(blackpoint_current[index], commentController.text);
+                                                        if ( blackpoint_current[index].comments == null){
+                                                          blackpoint_current[index].comments = [];
+                                                          blackpoint_current[index].comments!.add(commentController.text);
+                                                        }
+                                                        else{
+                                                          blackpoint_current[index].comments!.add(commentController.text);
+                                                        }
+                                                        commentController.clear();
+                                                        Get.offAll(()=>MyHomePage());
+                                                      }),
                                                     ],
                                                   )
                                                 ],));
