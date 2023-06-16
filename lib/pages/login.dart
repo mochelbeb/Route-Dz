@@ -66,10 +66,20 @@ class LoginPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
+                    GestureDetector(
+                      onTap: () {
+                        if (emailController.text.isEmpty) {
+                          Get.snackbar('Erreur', 'Veuillez entrer votre email',snackPosition: SnackPosition.BOTTOM);
+                          return;
+                        }else{
+                          FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+                          Get.snackbar('Succès', 'Un email de réinitialisation de mot de passe a été envoyé à votre adresse email',snackPosition: SnackPosition.BOTTOM);
+                        }
+                      },
+                      child:Text(
                       'Mot de passe oublié ?',
                       style: TextStyle(color: Colors.grey[600],fontSize: 16.sp),
-                    ),
+                    )),
                   ],
                 ),
               ),
