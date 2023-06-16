@@ -63,6 +63,27 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
     super.dispose();
   }
 
+  void filterSearchResults(String query) {
+    List<BlackPoint> dummySearchList = [];
+    dummySearchList.addAll(blackPoints);
+    if (query.isNotEmpty) {
+      List<BlackPoint> dummyListData = [];
+      dummySearchList.forEach((item) {
+        if (item.type.toLowerCase().contains(query.toLowerCase())) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        blackpoint_current.value = dummyListData;
+      });
+      return;
+    } else {
+      setState(() {
+        blackpoint_current.value = blackPoints;
+      });
+    }
+  }
+
   void filterBy(int? n , String? type , String? etat){
     myList = blackPoints;
     if(n != null){
@@ -130,8 +151,11 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                         width: w * 0.7,
                         child: TextFormField(
                           controller: _controller,
-                          onChanged: (_) => EasyDebounce.debounce('_controller',
-                              const Duration(milliseconds: 2000), () => {}),
+                          onChanged: (value){
+                              EasyDebounce.debounce('_controller',
+                              const Duration(milliseconds: 2000), () => {});
+                              filterSearchResults(value);
+                              },
                           autofocus: false,
                           textCapitalization: TextCapitalization.none,
                           obscureText: false,
