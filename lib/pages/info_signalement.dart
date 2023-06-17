@@ -26,7 +26,7 @@ class _Info_suppState extends State<Info_supp> {
   final _controllerDescription = TextEditingController();
   final PageController _pageController = PageController(viewportFraction: 0.8);
 
-  List<String> type_list  = ["Nid-de-poule","Erosion","Déformation","Manque d'éclairage","Manque de Signalisation"]; // ** types
+  var type_list = ["Nid de poule","Erosion","Déformation","Fissure","Manque d'éclairage","Mauvaise signalisation","bordures dégradées","Dos-d'âne non conforme"]; // la liste des types 
   late bool _isButtonDisable;
   String _selectedItem = "";
   List<File>? resultList;

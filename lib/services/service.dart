@@ -87,7 +87,7 @@ class Service {
         final pickedImage = await picker.pickImage(source: ImageSource.camera);
         if (pickedImage != null){
           File selectedImage = File(pickedImage.path);
-          selectedPictures!.add(selectedImage);
+          selectedPictures.add(selectedImage);
           return selectedPictures;
         }
       } else{

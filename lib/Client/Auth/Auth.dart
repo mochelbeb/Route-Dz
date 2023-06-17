@@ -66,7 +66,6 @@ Future<UserCredential?> SignupWithInfos(String username, String email, String pa
 void SignOut()async{
   try{
     await _auth.signOut();
-    print('current user is : ${_auth.currentUser}');
     if(_auth.currentUser == null){
       Get.offAll(LoginPage());
     }

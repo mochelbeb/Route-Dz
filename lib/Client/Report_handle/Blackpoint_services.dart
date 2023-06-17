@@ -31,6 +31,7 @@ class FirestoreService{
     });
 
     // 2. Upload pictures to Cloud Storage
+
     if (pictures != null){
       List<String> pictureUrls = await uploadPictures(pictures , documentRef.id);
       await documentRef.update({'pictures' : pictureUrls});
@@ -89,7 +90,6 @@ class FirestoreService{
     }).toList();
 
   // Return the list of BlackPoint objects
-  print('BlackPoints : $blackPoints');
   return blackPoints;
   }
   
@@ -146,15 +146,10 @@ class FirestoreService{
 
 
   static BlackPoint? findBlackPointFromSymbol(Symbol symbol, List<BlackPoint> blackPoints) {
-  var logger = Logger();
   final symbolId = symbol.data!['id'];
-  logger.i("symbol id : $symbolId");
-  
-
   
   // Iterate through the blackPoints list and find the matching BlackPoint
   for (final blackPoint in blackPoints) {
-    logger.i("black point id : ${blackPoint.id}");
     if (blackPoint.id as String == symbolId) {
       return blackPoint;
     }
@@ -185,7 +180,7 @@ class FirestoreService{
   }
 
 
-  static void addCommentToBlackPoint(BlackPoint blackpoint_current, text) async {
+  static void addCommentToBlackPoint(BlackPoint blackpoint_current,String text) async {
     String? docID = blackpoint_current.id;
     final collectionRef = _firestore.collection("Blackpoints");
     final documentRef = collectionRef.doc(docID);

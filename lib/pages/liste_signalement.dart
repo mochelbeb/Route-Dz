@@ -70,7 +70,6 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
 
   Future<void> _pick_BP_images(String docId) async {
 // show bottomSheet to make choice between camera and gallery
-    Logger().i("pick image");
     Get.bottomSheet(
       BottomSheet(onClosing: (){}, builder: (context){
         return Container(
@@ -144,7 +143,6 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
       });
       blackpoint_current.value = myList;
     } else if (type != null){
-      Logger().i("type : $type");
       myList = blackPoints.where((element) => element.type == type).toList();
       blackpoint_current.value = myList;
     } else if (etat != null){
@@ -471,7 +469,6 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                             ),
                                             OutlinedButton(
                                               onPressed: (){
-                                                Logger().i(selectedValue);
                                                 if (!enCour_btn.value){
                                                   filterBy(null, null, "En cours");
                                                 } else if (!attente_btn.value){
@@ -687,6 +684,8 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                               
                                             } // ** Illuster avec des images ** // 
                                           ),
+
+
                                           const Gap(70),
                                           IconButton(
                                             onPressed: () {
@@ -722,18 +721,20 @@ class _Liste_SignalementState extends State<Liste_Signalement> {
                                                                                                           ),
                                                       ),
                                                       const Gap(10),
-                                                      IconButton(icon: FaIcon(FontAwesomeIcons.chevronRight), onPressed: (){
-                                                        FirestoreService.addCommentToBlackPoint(blackpoint_current[index], commentController.text);
-                                                        if ( blackpoint_current[index].comments == null){
-                                                          blackpoint_current[index].comments = [];
-                                                          blackpoint_current[index].comments!.add(commentController.text);
-                                                        }
-                                                        else{
-                                                          blackpoint_current[index].comments!.add(commentController.text);
-                                                        }
-                                                        commentController.clear();
-                                                        Get.offAll(()=>MyHomePage());
-                                                      }),
+                                                      IconButton(
+                                                        icon: FaIcon(FontAwesomeIcons.chevronRight),
+                                                        onPressed: (){
+                                                          FirestoreService.addCommentToBlackPoint(blackpoint_current[index], commentController.text);
+                                                          if ( blackpoint_current[index].comments == null){
+                                                            blackpoint_current[index].comments = [];
+                                                            blackpoint_current[index].comments!.add(commentController.text);
+                                                          }
+                                                          else{
+                                                            blackpoint_current[index].comments!.add(commentController.text);
+                                                          }
+                                                          commentController.clear();
+                                                          Get.offAll(()=>MyHomePage());
+                                                        }),
                                                     ],
                                                   )
                                                 ],));
